@@ -1,7 +1,7 @@
 /* Banco_logico: */
 
 CREATE TABLE estoque (
-    id_estoque INT PRIMARY KEY,
+    id_estoque INT  AUTO_INCREMENT PRIMARY KEY,
     nome_produto VARCHAR (40),
     tipo_produto VARCHAR (20),
     marca_produto VARCHAR (20),
@@ -10,8 +10,8 @@ CREATE TABLE estoque (
 );
 
 CREATE TABLE venda (
-    id_comanda INT PRIMARY KEY,
-    data DATE,
+    id_comanda INT AUTO_INCREMENT PRIMARY KEY,
+    `data` DATE,
     hora TIME,
     valor DECIMAL(6,2)
 );
@@ -23,7 +23,7 @@ CREATE TABLE historico (
 );
 
 CREATE TABLE clientes (
-    id_cliente INT PRIMARY KEY,
+    id_cliente INT AUTO_INCREMENT PRIMARY KEY,
     nome_cliente VARCHAR(30) not null,
     descricao_cliente varchar (200) null,
     clientes_id_comanda INT
