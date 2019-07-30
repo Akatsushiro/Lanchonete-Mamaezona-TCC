@@ -1,0 +1,17 @@
+Título;Descrição;Prazo;Início Estimado;Término Estimado;Responsável
+Modelagem de Banco de Dados;Criar o MER, DER, e o físico do banco de dados que será utilizado no software.;Risco de atraso;25/07/2019;08/08/2019;
+Interface -> Logar;Criar o HTML e CSS responsivos do pagina de login;No prazo;05/08/2019;10/08/2019;
+Interface -> Estoque;Criar o HTML e CSS responsivo para a tela de estoque, que terá tabela de listagem, barra de filtro e pesquisa.;No prazo;10/08/2019;19/08/2019;
+Interface -> Produtos;Criar a tela de produtos onde terão as funções de cadastrar, alterar, excluir e listar clientes.;No prazo;10/08/2019;19/08/2019;
+Interface -> Clientes;Criar HTML e CSS responsivo de clientes que tem formulários de cadastrar, alterar, excluir e listar clientes.;No prazo;10/08/2019;19/08/2019;
+Interface -> Vendas;Fazer a tela de vendas onde e necessário pesquisa dinâmica, listagem dos produtos pesquisados e selecionados, mudar a quantia de produtos, opção de retirar produtos da tabla, desconto ou acréscimo, e fila de espera. ;No prazo;10/08/2019;19/08/2019;
+Interface -> DashBoard;Criar a tela de dashboard, onde se terá uma noção básica dos negócios atualmente e vai se retirar outros relatórios mais específicos.;No prazo;10/08/2019;19/08/2019;
+Programação -> Logar;Será feita a conexão e verificação da tela logar para se ter acesso ao resto do programa.;No prazo;19/08/2019;21/08/2019;
+Programação -> Estoque;Conectar ao banco para listar os produtos.;No prazo;19/08/2019;23/08/2019;
+Programação -> Produtos;Conectar os formulários de salvar, excluir, alterar ao banco e listar os clientes de acordo com o filtro.;No prazo;19/08/2019;23/08/2019;
+Programação -> Cliente;Conectar os formulários de cadastrar, excluir, alterar ao banco e listar os existente de acordo com o filtro.;No prazo;19/08/2019;28/08/2019;
+Programação -> Vendas;Criar a pesquisa dinâmica e a tabela com os produtos selecionados, deve ser possível mudar a quantia de produtos por uma caixa de texto na tabela, também deve ser possível retirar um produto através da tabela.  Campo de desconto e acréscimo deve afetar o valor final da venda, ao fechar uma venda deve-se escolher a forma de pagamento.  Fila de espera e onde fica os pedidos que necessitam ir para a cozinha.;No prazo;23/08/2019;05/09/2019;
+Documentação -> Manual;Deve-se criar o manual do usuário para que o usuário possa consultar sempre que tiver duvida sobre o software.;No prazo;05/09/2019;12/09/2019;
+Documentação -> Monografia;Terminar a monografia para entregar a escola.;No prazo;28/08/2019;09/09/2019;
+Programação -> Relatórios;Criar as requisições de relatórios específicos.;No prazo;21/08/2019;05/09/2019;
+Programação -> DashBoard;conectar o Dashboard para exibir informações básicas a partir do banco de dados, como um relatório geral.;No prazo;23/08/2019;11/09/2019;
