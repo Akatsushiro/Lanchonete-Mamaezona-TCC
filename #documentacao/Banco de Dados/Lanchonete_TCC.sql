@@ -1,11 +1,12 @@
 /* Banco_logico: */
 
 CREATE TABLE estoque (
-    id_estoque INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    id_produto INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
     nome_produto VARCHAR(30) NOT NULL,
     tipo VARCHAR(15) NOT NULL,
     marca VARCHAR(15) NOT NULL,
     preco DECIMAL(5,2) NOT NULL,
+	quantia_min INT NOT NULL,
     quantia INT NOT NULL
 );
 
@@ -15,7 +16,7 @@ CREATE TABLE venda (
     data_atual DATE NOT NULL,
     hora TIME NOT NULL,
     valor DECIMAL (6,2) NOT NULL,
-    tipo VARCHAR (10) NOT NULL,
+    forma_de_pagamento VARCHAR (10) NOT NULL,
     desconto DECIMAL (6,2) NULL,
     acresimo DECIMAL (6,2) NULL
 );
@@ -24,8 +25,8 @@ CREATE TABLE venda (
 CREATE TABLE cliente (
     id_cliente INT NOT NULL PRIMARY KEY,
     nome_cliente VARCHAR (50) NOT NULL,
-    estado CHAR(1),
-    descricao_cliente VARCHAR(20)  NULL
+    situacao CHAR(1),
+    descricao_cliente VARCHAR(150)  NULL
 );
 
 /*------------------------------------------------------------------------------*/
@@ -46,7 +47,7 @@ CREATE TABLE historico (
 
 ALTER TABLE `historico` ADD CONSTRAINT `id_comanda` FOREIGN KEY (`id_comanda` ) REFERENCES `venda` (`id_comanda`);
 
-ALTER TABLE `historico` ADD CONSTRAINT `id_produto` FOREIGN KEY (`id_produto`) REFERENCES `produto` (`id_estoque`);
+ALTER TABLE `historico` ADD CONSTRAINT `id_produto` FOREIGN KEY (`id_produto`) REFERENCES `produto` (`id_produto`);
 
 /*------------------------------------------------------------------------------*/
 CREATE TABLE consumo_interno (
