@@ -1,0 +1,20 @@
+h1 {
+    text-align: center;
+}
+
+form {
+    margin-top: 5%;
+    text-align: center;
+    background-color: azure;
+    padding: 25px;
+    position: relative;
+}
+
+table {
+    text-align: center;
+    border: 3px solid black;
+}
+
+td {
+    border-right: 2px solid black
+}
