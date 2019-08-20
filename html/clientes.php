@@ -56,7 +56,7 @@
                         <td><a href='cliente_alterar.php?id=$id'>$nome</a></td>
                         <td onload='teste()'>$descricao</td>
                         <td id='situacao_cor'>$situacao</td>
-                        <td><a href='clientes_excluir.php?id=$id'>Excluir</a></td>
+                        <td><a href='../php/cliente_excluir.php?id=$id'>Excluir</a></td>
                     </tr>
                 ";
             }
