@@ -1,17 +1,28 @@
 <?php
 require_once "../../model/security.class.php";
 require_once "../../model/pdo.Banco.class.php";
+require_once "../../model/cliente/cliente.PDO.php";
 
 // Classe de CRUD da tabela Cliente
 $verificar = new Seguranca();
 
-class Table_Cliente extends Banco
+interface iTable_Cliente{
+    
+    public function insertCliente(Cliente $Cliente);
+    public function selectCliente($id);
+    public function updateCliente($id, $Cliente);
+    public function deleteCliente($id);
+    public function listarClientes();
+    
+}
+
+class Table_Cliente extends Banco implements iTable_Cliente
 {
-    function insertCliente(Cliente $Cliente) //object Cliente
+    final function insertCliente(Cliente $Cliente) //object Cliente
     {
         global $pdo;
         global $verificar;
-        $bd = new Banco();
+        $bd = new Table_Cliente();
         $bd->conectar();
         // verifica se os dados do cliente estão corretos e de acordo com o banco
         if ($verificar->clienteTestes($Cliente)) {
@@ -27,10 +38,10 @@ class Table_Cliente extends Banco
         $bd->desconectar();
     }
 
-    function selectCliente($id)
+    final function selectCliente($id)
     {
         global $pdo;
-        $bd = new Banco();
+        $bd = new Table_Cliente();
         $bd->conectar();
         $sql = $pdo->prepare("SELECT `nome_cliente`, `situacao`, `descricao_cliente` FROM `cliente` WHERE id_cliente = ?");
         $sql->execute(array($id));
@@ -43,9 +54,10 @@ class Table_Cliente extends Banco
         return $dados;
         $bd->desconectar();
     }
-    function verificarCliente($nome){
+
+    final function verificarCliente($nome){
         global $pdo;
-        $bd = new Banco();
+        $bd = new Table_Cliente();
         $bd->conectar();
         $sql = $pdo->prepare("SELECT `nome_cliente`, `situacao`, `descricao_cliente` FROM `cliente` WHERE nome_cliente = ?");
         $sql->execute(array($nome));
@@ -57,10 +69,10 @@ class Table_Cliente extends Banco
         }
     }
     
-    function updateCliente($id, $Cliente)
+    final function updateCliente($id, $Cliente)
     {
         global $pdo;
-        $bd = new Banco();
+        $bd = new Table_Cliente();
         $bd->conectar();
         $sql = $pdo->prepare('UPDATE `cliente` SET `nome_cliente`=?,`situacao`=?,`descricao_cliente`=? WHERE id_cliente = ?');
         try {
@@ -71,28 +83,28 @@ class Table_Cliente extends Banco
         $bd->desconectar();
     }
 
-    function deleteCliente($id)
+    final function deleteCliente($id)
     {
         global $pdo;
-        $bd = new Banco();
+        $bd = new Table_Cliente();
         $bd->conectar();
         $sql = $pdo->prepare("DELETE FROM `cliente` WHERE id_cliente = ?");
         $sql->execute(array($id));
         $bd->desconectar();
     }
 
-    function listarClientes()
+    final function listarClientes()
     {
         global $pdo;
-        $bd = new Banco();
+        $bd = new Table_Cliente();
         $bd->conectar();
         $sql = $pdo->prepare("SELECT * FROM cliente ORDER BY `id_cliente`");
         $sql->execute();
         $dados = $sql->fetchAll();
         $i = 0;
         echo "
-        <table>
-            <tr>
+        <table class='table table-bordered table-striped text-center container'>
+            <tr class='thead-dark'>
                 <th>ID</th>
                 <th>Nome</th>
                 <th>Situação</th>

@@ -1,6 +1,10 @@
 <?php
 // Classe de verificação Server-Side
-class Seguranca
+interface iSeguraça{
+  public function clienteTestes(Cliente $Cliente);
+}
+
+final class Seguranca implements iSeguraça
 {
   private $caracters = [
     "a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n",
@@ -37,7 +41,7 @@ class Seguranca
     }
   }
 
-  function clienteTestes($Cliente){
+  function clienteTestes(Cliente $Cliente){
     $nome = $this->nome($Cliente->getNome());
     $situacao = $this->situacao($Cliente->getSituacao());
     if($nome == true && $situacao == true){

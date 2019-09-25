@@ -1,7 +1,22 @@
 <?php
 require_once "cliente.PDO.php";
 $bd = new table_cliente();
-class Cliente
+
+interface iCliente{
+    public function getNome();
+    public function getSituacao();
+    public function getDescricao();
+
+    public function setNome($n);
+    public function setSituacao($s);
+    public function setDescricao($d);
+
+    public function cadastroCliente($nome, $situacao, $descricao);
+    public function atualizarCliente($id, $nome, $situacao, $descricao);
+    public function excluirCliente($id);
+}
+
+final class Cliente implements iCliente
 {
     private $nome;
     private $situacao;
@@ -46,28 +61,28 @@ class Cliente
     // ----------------------------------------------------------------
 
     // Define os dados de um Cliente
-    function dadosCliente($nome, $situacao, $descricao)
+    private function dadosCliente($nome, $situacao, $descricao)
     {
         $this->setNome($nome);
         $this->setSituacao($situacao);
         $this->setDescricao($descricao);
     }
 
-    function cadastroCliente($nome, $situacao, $descricao)
+    final function cadastroCliente($nome, $situacao, $descricao)
     {
         global $bd;
         $this->dadosCliente($nome, $situacao, $descricao);
         $bd->insertCliente($this);
     }
 
-    function atualizarCliente($id, $nome, $situacao, $descricao)
+    final function atualizarCliente($id, $nome, $situacao, $descricao)
     { 
         global $bd;
         $this->dadosCliente($nome, $situacao, $descricao);
         $bd->updateCliente($id, $this);
     }
 
-    function excluirCliente($id){
+    final function excluirCliente($id){
         global $bd;
         $bd->deleteCliente($id);
     }

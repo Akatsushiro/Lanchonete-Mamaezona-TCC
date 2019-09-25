@@ -1,7 +1,11 @@
 <?php
 // Classe de conexão universal ao banco
+interface iBanco{
+    public function conectar($nome = "mamaezona", $host = "localhost", $usuario = "root", $senha = "1234");
+    public function desconectar();
+}
 
-class Banco
+abstract class Banco
 {
     public $pdo;
     public $msg;
