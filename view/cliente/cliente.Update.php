@@ -5,6 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="..\css\bootstrap.css">
     <title>PDO</title>
 </head>
 
@@ -14,6 +15,13 @@
     $cliente = new Table_Cliente();
     $id = addslashes($_GET['id']);
     $dados = $cliente->selectCliente($id);
+    if($dados[3] == "C"){
+        $comum = "checked";
+        $mensal = "";
+    }elseif($dados[3] == "M"){
+        $comum = "";
+        $mensal = "checked";
+    }
     ?>
     <center>
         <h1>Alterar</h1>
@@ -26,6 +34,12 @@
             <br>
             <br>
             Descrição: <Textarea name="descricao"><?php echo $dados[2];?></Textarea>
+            <br>
+            <br>
+            Cliente:
+            <br>
+            Comum  <input type="radio" name="tipo" value="C" id="" <?php echo $comum; ?>> | 
+            Mensal <input type="radio" name="tipo" value="M" id="" <?php echo $mensal; ?>>
             <br>
             <br>
             <input type="submit" value="Enviar">

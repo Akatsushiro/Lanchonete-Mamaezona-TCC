@@ -11,14 +11,14 @@ if ($_GET['op'] == "delete") {
     $nome      = addslashes($_POST['nome']);
     $situacao  = addslashes($_POST['situacao']);
     $descricao = addslashes($_POST['descricao']);
+    $tipo      = addslashes($_POST['tipo']);
     if ($_GET['op'] == "update") {
         // Atualizar Cliente
         $id = $_GET['id'];
-        $cliente->atualizarCliente($id, $nome, $situacao, $descricao);
+        $cliente->atualizarCliente($id, $nome, $situacao, $descricao, $tipo);
     } elseif ($_GET['op'] == "insert") {
         // Cadastrar Cliente
-        $cliente->cadastroCliente($nome, $situacao, $descricao);
+        $cliente->cadastroCliente($nome, $situacao, $descricao, $tipo);
     }
 }
-
-header("location: ../../view/cliente/cliente.Main.php");
+//header("location: ../../view/cliente/cliente.Main.php");

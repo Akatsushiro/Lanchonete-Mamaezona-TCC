@@ -5,21 +5,28 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="..\css\bootstrap.css">
     <title>Cadastro Cliente</title>
 </head>
 
 <body>
     <center>
         <h1>Cadastrar</h1>
-        <!-- formulario de cadastar cliente  -->
-        <form action="../../controller/cliente/cliente.controller.php?op=insert" method="post" enctype="multipart/form-data">
+        <!-- formulario de cadastrar cliente  -->
+        <form action="../../controller/cliente/cliente.controller.php?op=insert" method="post" enctype="multipart/form-data" class="my-2">
             Nome: <input type="text" name="nome" id="">
             <br>
             <br>
             Situacao: <input type="text" name="situacao" id="">
             <br>
             <br>
-            Descrição: <Textarea name="descricao">Descrição</Textarea>
+            Descrição: <Textarea name="descricao"></Textarea>
+            <br>
+            <br>
+            Cliente:
+            <br>
+            Comum  <input type="radio" name="tipo" value="C" id="" checked> | 
+            Mensal <input type="radio" name="tipo" value="M" id="">
             <br>
             <br>
             <input type="submit" value="Enviar">
