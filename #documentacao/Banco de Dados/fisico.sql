@@ -26,7 +26,7 @@ CREATE TABLE IF NOT EXISTS `mamaezona`.`cliente` (
   `situacao` CHAR(1) NOT NULL DEFAULT 'P' COMMENT 'Diz se o cliente tem dividas ativas.',
   `descricao` VARCHAR(200) NULL DEFAULT NULL,
   `data_cliente` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP() COMMENT 'data do cadastro do cliente',
-  `status_cliente` TINYINT(4) NOT NULL COMMENT 'Diz se o cliente está ativo ou desativo',
+  `status_cliente` TINYINT(4) NOT NULL DEFAULT 1 COMMENT 'Diz se o cliente está ativo ou desativo',
   `tipo_cliente` CHAR(1) NOT NULL DEFAULT 'C' COMMENT 'se o cliente é mensal ou comum',
   PRIMARY KEY (`id_cliente`))
 ENGINE = InnoDB
@@ -46,7 +46,7 @@ CREATE TABLE IF NOT EXISTS `mamaezona`.`funcionarios` (
   `acesso` CHAR(2) NOT NULL,
   `admitido` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP(),
   `dispensa` TIMESTAMP NULL DEFAULT NULL,
-  `status` TINYINT(4) NOT NULL,
+  `status` TINYINT(4) NOT NULL DEFAULT 1,
   PRIMARY KEY (`id_funcionarios`))
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8
@@ -93,7 +93,7 @@ COMMENT = 'vendas que vão para a conta do estabelecimento.';
 
 
 -- -----------------------------------------------------
--- Table `mamaezona`.`contas`
+-- Table `mamaezona`.`contas`cliente
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `mamaezona`.`contas` (
   `cliente_id_cliente` INT(11) NOT NULL,
@@ -125,6 +125,7 @@ CREATE TABLE IF NOT EXISTS `mamaezona`.`estoque` (
   `preco` DECIMAL(6,2) NOT NULL,
   `quantia` INT(11) NOT NULL,
   `quantia_min` INT(11) NOT NULL COMMENT 'quantia minima que um produto pode ter no estoque, quando atingido esse numero devesse notificar o usuario.',
+  `status_estoque`  TINYINT(4) NOT NULL DEFAULT 1,
   PRIMARY KEY (`id_estoque`))
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8
@@ -143,6 +144,7 @@ CREATE TABLE IF NOT EXISTS `mamaezona`.`produto` (
   `preco` DECIMAL(6,2) NOT NULL,
   `estoque_id_estoque` INT(11) NOT NULL,
   `custo` DECIMAL(6,2) NOT NULL COMMENT 'Quanto aquele produto custa para o dono.',
+  `status_produto` TINYINT(4) NOT NULL DEFAULT 1,
   PRIMARY KEY (`id_produto`),
   CONSTRAINT `fk_produto_estoque1`
     FOREIGN KEY (`estoque_id_estoque`)

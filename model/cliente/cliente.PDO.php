@@ -36,10 +36,10 @@ class Table_Cliente extends Banco implements iTable_Cliente
                 VALUES(?, ?, ?, ?)");
                 $sql->execute(array($Cliente->getNome(), $Cliente->getSituacao(),  $Cliente->getDescricao(), $Cliente->getTipo()));
             } else {
-                return "Usuário já existe";
+                return "Usuário já existe"; //false
             }
         } else {
-            return "Existem erros nos dados, digite novamente";
+            return "Existem erros nos dados, digite novamente"; //false
         }
         $bd->desconectar();
     }
@@ -125,7 +125,7 @@ class Table_Cliente extends Banco implements iTable_Cliente
                 <th>Nome</th>
                 <th>Situação</th>
                 <th>Descrição</th>
-                <th></th>
+                <th>tipo</th>
             </tr>
         ";
         foreach ($dados as $l) {
