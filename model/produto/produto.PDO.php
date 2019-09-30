@@ -16,4 +16,16 @@ class Table_Produto extends Banco
         $sql->execute(array($Produto->nome, $Produto->tipo, $Produto->marca, $Produto->preco, $Produto->custo));
         $bd->desconectar();
     }
+
+    function updateProduto($id, Produto $Produto)
+    {
+        global $pdo;
+        $bd = new Table_Produto();
+        $bd-> conectar();
+        $sql = $pdo->prepare("UPDATE produto SET nome_produto =?, tipo =?, marca =?, preco =?, custo =? WHERE id_produto =?");
+        $sql->execute(array($Produto->nome, $Produto->tipo, $Produto->marca, $Produto->preco, $Produto->custo, $id));
+        $bd->desconectar();
+    }
+
+    function selectProduto($id){}
 }

@@ -21,4 +21,4 @@ if ($_GET['op'] == "delete") {
         $cliente->cadastroCliente($nome, $situacao, $descricao, $tipo);
     }
 }
-//header("location: ../../view/cliente/cliente.Main.php");
+header("location: ../../view/cliente/cliente.Main.php");
