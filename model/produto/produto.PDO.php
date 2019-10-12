@@ -27,5 +27,21 @@ class Table_Produto extends Banco
         $bd->desconectar();
     }
 
-    function selectProduto($id){}
+    function selectProduto($id)
+    {
+        global $pdo;
+        $bd = new Table_Produto();
+        $bd-> conectar();
+        $sql = $pdo->prepare("SELECT * FROM `produto` WHERE id_produto = ?"); 
+        $sql->execute(array($id));
+        while ($col = $sql->fetch(PDO::FETCH_ASSOC)){
+            $dados[] = $col ['nome_produto'];
+            $dados[] = $col ['tipo'];
+            $dados[] = $col ['marca'];
+            $dados[] = $col ['preco'];
+            $dados[] = $col ['custo'];
+        }
+        return $dados;
+        $bd->desconectar();
+    }
 }
