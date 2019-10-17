@@ -23,4 +23,11 @@ class Produto{
         $this->dadosProduto($nome_produto, $tipo_produto, $marca_, $preco_, $custo);
         $bd->insertProduto($this);
     }
+
+    function alterarProduto($id, $nome_produto, $tipo_produto, $marca_, $preco_, $custo){
+        global $bd;
+        $this->dadosProduto($nome_produto, $tipo_produto, $marca_, $preco_, $custo);
+        $bd->updateProduto($id, $this);
+
+    }
 }
