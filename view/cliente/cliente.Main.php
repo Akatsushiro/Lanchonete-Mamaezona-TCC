@@ -25,7 +25,7 @@
             <br>
             Cliente:
             <br>
-            Comum  <input type="radio" name="tipo" value="C" id="" checked> | 
+            Comum <input type="radio" name="tipo" value="C" id="" checked> |
             Mensal <input type="radio" name="tipo" value="M" id="">
             <br>
             <br>
@@ -35,8 +35,14 @@
         require_once "../../model/cliente/cliente.PDO.php";
         // listar clientes existentes
         $listar = new Table_Cliente();
+        $dados = $listar->listarClientesArray();
         $list = $listar->listarClientes();
         ?>
+        <pre>
+        <?php
+        print_r($dados);
+        ?>
+        </pre>
     </center>
 </body>
 

@@ -7,10 +7,9 @@ interface iBanco{
 
 abstract class Banco
 {
-    public $pdo;
+    protected $pdo;
     public $msg;
-
-    function conectar($nome = "mamaezona", $host = "localhost", $usuario = "root", $senha = "")
+    function conectar($nome = "mamaezona", $host = "localhost", $usuario = "root", $senha = "1234")
     {
         global $pdo;
         try {

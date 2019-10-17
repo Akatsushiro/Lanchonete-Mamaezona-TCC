@@ -1,0 +1,2 @@
+050 -> Já existe um cliente com este nome
+051 -> Erro na operação de cliente

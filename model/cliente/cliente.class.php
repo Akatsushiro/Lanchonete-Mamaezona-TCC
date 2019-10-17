@@ -1,5 +1,7 @@
 <?php
+require_once "../../model/security.class.php";
 require_once "cliente.PDO.php";
+$teste_unitario = new Seguranca();
 $bd = new table_cliente();
 
 interface iCliente{
@@ -83,8 +85,11 @@ final class Cliente implements iCliente
     final function cadastroCliente($nome, $situacao, $descricao, $tipo)
     {
         global $bd;
+        global $teste_unitario;
         $this->dadosCliente($nome, $situacao, $descricao, $tipo);
-        $bd->insertCliente($this);
+        if($teste_unitario->clienteTestes($this)){
+            $bd->insertCliente($this);
+        }
     }
 
     final function atualizarCliente($id, $nome, $situacao, $descricao, $tipo)
