@@ -13,7 +13,7 @@ class Table_Produto extends Banco
         $bd = new Table_Produto();
         $bd->conectar();
         $sql = $pdo->prepare("INSERT INTO `produto` (`nome_produto`, `tipo`, `marca`, `preco`, `custo`) VALUES (?, ?, ?, ?, ?)");
-        $sql->execute(array($Produto->nome, $Produto->tipo, $Produto->marca, $Produto->preco, $Produto->custo));
+        $sql->execute(array($Produto->getNome(), $Produto->getTipo(), $Produto->getMarca(), $Produto->getPreco(), $Produto->getCusto()));
         $bd->desconectar();
     }
 
@@ -23,7 +23,7 @@ class Table_Produto extends Banco
         $bd = new Table_Produto();
         $bd-> conectar();
         $sql = $pdo->prepare("UPDATE produto SET nome_produto =?, tipo =?, marca =?, preco =?, custo =? WHERE id_produto =?");
-        $sql->execute(array($Produto->nome, $Produto->tipo, $Produto->marca, $Produto->preco, $Produto->custo, $id));
+        $sql->execute(array($Produto->getNome(), $Produto->getTipo(), $Produto->getMarca(), $Produto->getPreco(), $Produto->getCusto(), $id));
         $bd->desconectar();
     }
 
