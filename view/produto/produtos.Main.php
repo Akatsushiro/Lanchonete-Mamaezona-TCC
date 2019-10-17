@@ -10,6 +10,9 @@
 </head>
 
 <body>
+    <?php 
+    require_once "../../model/produto/produto.PDO.php";
+    ?>
     <center>
         <h1>Cadastrar</h1>
         <!-- formulario de cadastrar cliente  -->
@@ -23,15 +26,24 @@
             Marca: <Textarea name="marca">Descrição</Textarea>
             <br>
             <br>
-            Preço: <input type="number" name="preco" id="" step="any" min="0" max="9999.99">
+            Preço: <input type="number" name="preco" id="" step="any" min="0" max="9999">
             <br>
             <br>
-            Custo: <input type="number" name="custo" id="" step="any" min="0" max="9999.99">
+            Custo: <input type="number" name="custo" id="" step="any" min="0" max="9999">
             <br>
             <br>
-            input:
             <input type="submit" value="Enviar">
         </form>
+        <?php 
+        $produto = new Table_Produto();
+        $produto->listarProduto();
+
+        $dados = $produto->listarProdutosArray();
+        ?>
+        <pre>
+        <?php
+        print_r($dados);
+        ?>
     </center>
 </body>
 

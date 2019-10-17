@@ -15,28 +15,26 @@
     $produto = new Table_Produto();
     $id = addslashes($_GET['id']);
     $dados = $produto->selectProduto($id);
-    
     ?>
     <center>
         <h1>Cadastrar</h1>
         <!-- formulario de cadastrar cliente  -->
-        <form action="../../controller/produto/produto.controller.php?op=insert" method="post" enctype="multipart/form-data" class="my-2">
+        <form action="../../controller/produto/produto.controller.php?op=update&&id=<?php echo $id?>" method="post" enctype="multipart/form-data" class="my-2">
             Nome: <input type="text" name="nome" id="" value="<?php echo $dados[0];?>">
             <br>
             <br>
             Tipo: <input type="text" name="tipo" id="" value="<?php echo $dados[1];?>">
             <br>
             <br>
-            Marca: <Textarea name="marca"> <?php echo $dados[2];?></Textarea>
+            Marca: <input type="text" name="marca" id="" value="<?php echo $dados[2];?>">
             <br>
             <br>
             Preço: <input type="number" name="preco" id="" value="<?php echo $dados[3];?>" step="any" min="0" max="9999.99">
             <br>
             <br>
-            Custo: <input type="number" name="custo" id="" step="any" min="0" max="9999.99">
+            Custo: <input type="number" name="custo" id="" value="<?php echo $dados[4]; ?>" step="any" min="0" max="9999.99">
             <br>
             <br>
-            input:
             <input type="submit" value="Enviar">
         </form>
     </center>
