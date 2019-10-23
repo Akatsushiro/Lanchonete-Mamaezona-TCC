@@ -34,7 +34,7 @@ class Table_Cliente extends Banco implements iTable_Cliente
         $bd->desconectar();
     }
 
-    // Pega os dados de um cliente especifico pelo ID 
+    // Pega os dados de um cliente especifico pelo ID
     final function selectCliente($id)
     {
         global $pdo;
@@ -89,7 +89,7 @@ class Table_Cliente extends Banco implements iTable_Cliente
         $sql = $pdo->prepare("SELECT * FROM cliente WHERE `status_cliente` = 1 ORDER BY `nome_cliente`");
         $sql->execute();
         $dados = $sql->fetchAll(PDO::FETCH_ASSOC);
-        return $dados;
+        return json_encode($dados);
     }
 
     // Listar clientes com opções de exclusão e alterar, SOMENTE PARA TESTES

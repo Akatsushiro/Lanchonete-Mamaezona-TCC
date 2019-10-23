@@ -9,7 +9,7 @@ abstract class Banco
 {
     protected $pdo;
     public $msg;
-    function conectar($nome = "mamaezona", $host = "localhost", $usuario = "root", $senha = "1234")
+    function conectar($nome = "mamaezona", $host = "localhost", $usuario = "root", $senha = "")
     {
         global $pdo;
         try {

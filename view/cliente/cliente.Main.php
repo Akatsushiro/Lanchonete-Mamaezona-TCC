@@ -35,13 +35,11 @@
         require_once "../../model/cliente/cliente.PDO.php";
         // listar clientes existentes
         $listar = new Table_Cliente();
-        $dados = $listar->listarClientesArray();
+        $dados = "{ \"data\": " . $listar->listarClientesArray(). "}";
         $list = $listar->listarClientes();
+        echo "$dados";
         ?>
         <pre>
-        <?php
-        print_r($dados);
-        ?>
         </pre>
     </center>
 </body>
