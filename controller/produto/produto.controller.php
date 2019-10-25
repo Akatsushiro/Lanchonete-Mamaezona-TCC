@@ -14,7 +14,6 @@ if ($op == 'delete') {
     $marca = addslashes(trim($_POST['marca']));
     $preco = addslashes(trim($_POST['preco']));
     $custo = addslashes(trim($_POST['custo']));
-
     if ($op == 'insert') {
         $produto->cadastroProduto($nome, $tipo, $marca, $preco, $custo);
     } elseif ($op == 'update') {

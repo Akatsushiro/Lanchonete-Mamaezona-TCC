@@ -37,12 +37,8 @@
         <?php 
         $produto = new Table_Produto();
         $produto->listarProduto();
-
         $dados = $produto->listarProdutosArray();
-        ?>
-        <pre>
-        <?php
-        print_r($dados);
+        echo $dados;
         ?>
     </center>
 </body>

@@ -45,6 +45,25 @@ class Table_Produto extends Banco
         $bd->desconectar();
     }
 
+    //Retorna o produto para o AJAX em Json
+    function selectProdutoJson($id)
+    {
+        global $pdo;
+        $bd = new Table_Produto();
+        $bd-> conectar();
+        $sql = $pdo->prepare("SELECT * FROM `produto` WHERE id_produto = ?"); 
+        $sql->execute(array($id));
+        while ($col = $sql->fetch(PDO::FETCH_ASSOC)){
+            $dados[] = $col ['nome_produto'];
+            $dados[] = $col ['tipo'];
+            $dados[] = $col ['marca'];
+            $dados[] = $col ['preco'];
+            $dados[] = $col ['custo'];
+        }
+        return '{\"data\":' . json_encode($dados) . '}';
+        $bd->desconectar();
+    }
+
     function deleteProduto($id){
         global $pdo;
         $bd = new Table_Produto();
@@ -54,6 +73,8 @@ class Table_Produto extends Banco
         $bd->desconectar();
     }
 
+
+    //Retorna um array com os produtos ativos para o AJAX
     function listarProdutosArray(){
         global $pdo;
         $bd = new Table_Produto();
@@ -61,7 +82,7 @@ class Table_Produto extends Banco
         $sql = $pdo->prepare("SELECT `id_produto`, `nome_produto`, `tipo`, `marca`, `preco`, `estoque_id_estoque`, `custo`, `status_produto` FROM `produto` WHERE `status_produto` = 1"); 
         $sql->execute();
         $dados = $sql->fetchAll(PDO::FETCH_ASSOC);
-        return $dados;
+        return "{\"data\":" . json_encode($dados) . '}';
         $bd->desconectar();
     }
 

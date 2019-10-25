@@ -80,7 +80,7 @@ class Table_Cliente extends Banco implements iTable_Cliente
         $bd->desconectar();
     }
 
-    // Devolve um array com todos os clientes ativos
+    // Devolve um array com todos os clientes ativos para o AJAX
     final public function listarClientesArray()
     {
         global $pdo;
