@@ -3,8 +3,20 @@
 require_once "funcionario.PDO.php";
 $bd = new Table_Funcionario();
 
+/**
+ * Classe que representa um funcionário, faz a verificação dos dados antes de qualquer alteração no banco, para qualquer tarefa relacionada ao funcionario deve ser criada nesta classe.
+ */
 class Funcionario
 {
+    /**
+     * @var string $nome nome do funcionario
+     * 
+     * @var string $login nome do usuario no sistema
+     * 
+     * @var string $senha senhado usuario
+     * 
+     * @var string $acesso define nivel de acesso de usuário
+     */
     private $nome;
     private $login;
     private $senha;
@@ -53,7 +65,19 @@ class Funcionario
     }
     // --------------------------------------------------
 
-// Insere os dados do cliente no objeto
+    /**
+     * Insere os dados em um objeto funcionario
+     * 
+     * @var string $nome nome do funcionario
+     * 
+     * @var string $login nome do usuario no sistema
+     * 
+     * @var string $senha senhado usuario
+     * 
+     * @var string $acesso define nivel de acesso de usuário
+     * 
+     * @return void
+     */
     function dadosFuncionario($nome, $login, $senha, $acesso = 'CM')
     {
         $this->setNome($nome);
@@ -62,8 +86,14 @@ class Funcionario
         $this->setAcesso($acesso);
     }
 
-// Faz o login no sistema caso o login e a senha estejam corretas e faz
-// a diferenciação de nivel de acesso
+    /**
+     * Realiza o login do usuário, caso o login e a senha estejam corretos,
+     * abre uma sessão para o usuario.
+     *
+     * @param string $login nome do usuario no sistema
+     * @param string $senha senha do usuario
+     * @return void
+     */
     function logar($login, $senha)
     {
         require_once "../../model/pdo.Banco.class.php";
@@ -90,7 +120,11 @@ class Funcionario
         }
     }
 
-// Testa se o login foi realizado, evita o acesso por URL
+    /**
+     * Testa se o login foi realizado checando as variaveis de sessão e as comparando no banco, se não estiverem definidas ou não baterem no banco a sessãoe destruida.
+     *
+     * @return void
+     */
     function log_teste()
     {
         global $bd;
@@ -111,7 +145,19 @@ class Funcionario
         }
     }
 
-// Salva os dados de um Funcionario através do objeto
+    /**
+     * Verifica os dados do funcionário antes de inserir no objeto, caso corretos o os envia para serem salvos no banco.
+     * 
+     * @var string $nome nome do funcionario
+     * 
+     * @var string $login nome do usuario no sistema
+     * 
+     * @var string $senha senhado usuario
+     * 
+     * @var string $acesso define nivel de acesso de usuário
+     * 
+     * @return void
+     */
     function salvarFuncionario($nome, $login, $senha, $acesso = 'CM')
     {
         global $bd;
