@@ -15,10 +15,17 @@ interface iTable_Cliente
     public function listarClientesArray();
     public function listarClientes();
 }
-
+/**
+ * Classe responsável pelas alterações de cliente no banco. Aqui contém somente as 
+ * consultas e comandos MySQL.
+ */
 class Table_Cliente extends Banco implements iTable_Cliente
 {
-    //Insere dados na tabela clientes a parti de um objeto cliente
+    /**
+     * Cadastra um cliente no banco.
+     * 
+     * @param Cliente $Cliente recebe um objeto do tipo cliente.
+     */
     final function insertCliente(Cliente $Cliente)
     {
         global $pdo;
@@ -34,7 +41,24 @@ class Table_Cliente extends Banco implements iTable_Cliente
         $bd->desconectar();
     }
 
-    // Pega os dados de um cliente especifico pelo ID
+    /**
+     * Seleciona um cliente do banco pelo id e retorna seus dados.
+     * 
+     * @param int $id ID do cliente no banco.
+     * 
+     * @return array retorna um array com os dados do cliente na seguinte ordem:
+     * 
+     * 
+     * 0 - Nome do Cliente.
+     * 
+     * 1 - Situação 'Se o cliente está devendo, atrasado ou positivo'.
+     * 
+     * 2 - Descrição.
+     * 
+     * 3 - Tipo 'Se o cliente é comum ou mensal'.
+     * 
+     * 4 - Status 'Se o cliente está ativo no sistema ou não'.
+    */
     final function selectCliente($id)
     {
         global $pdo;
@@ -53,7 +77,16 @@ class Table_Cliente extends Banco implements iTable_Cliente
         $bd->desconectar();
     }
 
-    // Atualiza os dados do cliente a partir de um objeto cliente
+    /**
+     * Atualiza os dados de um cliente pelo seu ID
+     * 
+     * @param int $id ID co cliente respctivo no banco.
+     * 
+     * @param Cliente $Cliente Objeto do tipo cliente contendo as informações que serão * alteradas.
+     * 
+     * @return bool retorna 'true' se tudo ocorrer bem, caso não retorna o erro do  
+     * MySQL 
+     */
     final function updateCliente($id, Cliente $Cliente)
     {
         global $pdo;
@@ -62,14 +95,19 @@ class Table_Cliente extends Banco implements iTable_Cliente
         $sql = $pdo->prepare('UPDATE `cliente` SET `nome_cliente`=?,`situacao`=?,`descricao`=? , `tipo_cliente` = ? WHERE id_cliente = ?');
         try {
             $sql->execute(array($Cliente->getNome(), $Cliente->getSituacao(), $Cliente->getDescricao(), $Cliente->getTipo(), $id));
+            return true;
         } catch (PDOException $erro) {
-            echo $erro;
+            return $erro;
         }
         $bd->desconectar();
     }
 
 
-    // Desativa um cliente
+    /**
+     * Desativa um cliente pelo ID.
+     * 
+     * @param int $id ID do cliente relativo ao banco.
+     */
     final function deleteCliente($id)
     {
         global $pdo;
@@ -80,7 +118,9 @@ class Table_Cliente extends Banco implements iTable_Cliente
         $bd->desconectar();
     }
 
-    // Devolve um array com todos os clientes ativos para o AJAX
+    /**
+     * Retorna um json listando todos os cliente para que se possa utiliza-lo no AJAX.  
+     */ 
     final public function listarClientesArray()
     {
         global $pdo;
@@ -92,7 +132,9 @@ class Table_Cliente extends Banco implements iTable_Cliente
         return json_encode($dados);
     }
 
-    // Listar clientes com opções de exclusão e alterar, SOMENTE PARA TESTES
+    /**
+     * Listar clientes com opções de exclusão e alterar, SOMENTE PARA TESTES
+     */
     final function listarClientes()
     {
         global $pdo;
@@ -131,7 +173,14 @@ class Table_Cliente extends Banco implements iTable_Cliente
         $bd->desconectar();
     }
 
-    //Verifica se um cliente existe antes de Cadastrar
+    /**
+     * Verifica se um cliente existe antes de Cadastra-lo.
+     *
+     * @param string $nome Nome do cliente que será cadastrado.
+     * 
+     * @return bool Caso o cliente não exista no banco ele retorna 'TRUE' se o cliente 
+     * existir retorna 'FALSE'.
+     */
     final function verificarCliente($nome)
     {
         global $pdo;
