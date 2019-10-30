@@ -39,4 +39,12 @@ class Table_Funcionario extends Banco{
         $sql = $pdo->prepare("INSERT INTO funcionarios (nome, `login`, senha, acesso) VALUES (?, ?, ?, ?)");
         $sql->execute(array($Funcionario->getNome(), $Funcionario->getLogin(), $Funcionario->getSenha(), $Funcionario->getAcesso()));
     }
+//oauth
+    function updateFuncionario($id, Funcionario $Funcionario){
+        global $pdo;
+        $bd = new Table_Funcionario();
+        $bd->conectar();
+        $sql = $pdo->prepare("UPDATE `funcionarios` SET nome = ?, login = ?, senha = ?, acesso = ? WHERE id_funcionarios = ?;");
+        $sql->execute(array($Funcionario->getNome(), $Funcionario->getLogin(), $Funcionario->getSenha(), $Funcionario->getAcesso(), $id));
+    }
 }
