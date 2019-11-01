@@ -9,24 +9,79 @@ require_once "../../model/funcionario/funcionario.class.php";
 class Table_Funcionario extends Banco
 {
     /**
-     * Verifica se o usuário existe e se sua senha bestá correta
+     * Verifica se o usuário existe e se sua senha está correta
      *
      * @param string $login Nome do usuário no sistema
      * @param string $senha Senha do usuário
      * @return int $dados Retorna 0 senão existir, 1 se existir
      */
-    function login($login, $senha)
+    function login($login, $email, $senha)
     {
         global $pdo;
         $bd = new Table_Funcionario();
         $bd->conectar();
-        $sql = $pdo->prepare("SELECT * FROM funcionarios WHERE login = ? AND senha = ? AND `status` = ?");
-        $sql->execute(array($login, $senha, 1));
-        $dados = $sql->rowCount();
+        $sql = $pdo->prepare("SELECT * FROM funcionarios WHERE `login` = ? AND `email` = ? AND `status` = ?");
+        $sql->execute(array($login, $email, 1));
+        $dados['verificacao'] = $sql->rowCount();
+        if ($dados['verificacao'] == 1) {
+            while ($col = $sql->fetch(PDO::FETCH_ASSOC)) {
+                $senhaDB         = $col['senha'];
+                $key             = $col['chave'];
+                $dados['acesso'] = $col['acesso'];
+                $dados['id']     = $col['id_funcionarios'];
+                echo '<pre>';
+                print_r($col);
+            }
+
+            if ($this->pass_decrypt($senha, $senhaDB, $key)) {
+                $dados['log_teste'] = True;
+                $dados['key'] = $key;
+                echo '--- Encrypity-------';
+            } else {
+                $dados['log_teste'] = False;
+                echo '----- NOT --------<br>';
+            }
+        }
         return $dados;
     }
+
     /**
-     * Undocumented function
+     * Realiza a verificação da senha.
+     * 
+     * @param string $pass Senha do usuário.
+     * 
+     * @param string $passDB Senha armazenada no Banco.
+     * 
+     * @param string $key Chave de verificação de senha.
+     * 
+     * @return bool Retorna true caso a senha esteja correta, e false se errada.
+     */
+    function pass_decrypt($pass, $passDB, $key)
+    {
+        $user_pass = hash_hmac('sha256', $pass, $key);
+        return password_verify($user_pass, $passDB);
+    }
+
+    function log_bd_test($login, $email, $senha)
+    {
+        global $pdo;
+        $bd = new Table_Funcionario();
+        $bd->conectar();
+        $sql = $pdo->prepare("SELECT * FROM funcionarios WHERE `login` = ? AND `email` = ? `status` = ?");
+        $sql->execute(array($login, $email, 1));
+        $dados['verificacao'] = $sql->rowCount();
+        if ($dados['verificacao'] == 1) {
+            while ($col = $sql->fetch(PDO::FETCH_ASSOC)) {
+                $senhaDB = $col['senha'];
+            }
+            $dados['senha'] = password_verify($senha, $senhaDB);
+        }
+        echo '<pre>' . print_r($dados) . '</pre>';
+        return $dados;
+    }
+
+    /**
+     * Retorna os dados de um funcionario pelo seu id
      *
      * @param integer $id Código unico de identificação do usuário
      * 
@@ -78,8 +133,8 @@ class Table_Funcionario extends Banco
         global $pdo;
         $bd = new Table_Funcionario();
         $bd->conectar();
-        $sql = $pdo->prepare("INSERT INTO funcionarios (nome, `login`, senha, acesso) VALUES (?, ?, ?, ?)");
-        $sql->execute(array($Funcionario->getNome(), $Funcionario->getLogin(), $Funcionario->getSenha(), $Funcionario->getAcesso()));
+        $sql = $pdo->prepare("INSERT INTO funcionarios (nome, `login`, email, senha, chave, acesso) VALUES (?, ?, ?, ?, ?, ?)");
+        $sql->execute(array($Funcionario->getNome(), $Funcionario->getLogin(), $Funcionario->getEmail(), $Funcionario->getSenha(), $Funcionario->getKey(), $Funcionario->getAcesso()));
     }
     /**
      * Faz o Update de um funcionário pelo seu ID

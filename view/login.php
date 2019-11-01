@@ -17,6 +17,9 @@
             Login: <input type="text" name="login" id="">
             <br>
             <br>
+            Email: <input type="email" name="email" id="">
+            <br>
+            <br>
             Senha: <input type="password" name="senha" id="">
             <br>
             <br>

@@ -24,11 +24,13 @@ $vf->log_teste();
             Login: <input type="text" name="login" id="" required>
             <br>
             <br>
+            Email: <input type="text" name="email" id="">
+            <br>
+            <br>
             Senha: <input type="password" name="senha" id="" required>
             <br>
             <br>
             Tipo:
-            <br>
             <br>
             COMUM <input type="radio" name="acesso" value='CM' id="" checked> |
             ADMINISTRADOR <input type="radio" name="acesso" value="US" id="">

@@ -19,8 +19,10 @@ class Funcionario
      */
     private $nome;
     private $login;
+    private $email;
     private $senha;
     private $acesso;
+    private $key;
 
     // ------------------ Getters ---------------
     function getNome()
@@ -33,6 +35,11 @@ class Funcionario
         return $this->login;
     }
 
+    function getEmail()
+    {
+        return $this->email;
+    }
+
     function getSenha()
     {
         return $this->senha;
@@ -41,6 +48,11 @@ class Funcionario
     function getAcesso()
     {
         return $this->acesso;
+    }
+
+    function getKey()
+    {
+        return $this->key;
     }
 
     // --------------------- Setters ---------------
@@ -54,9 +66,16 @@ class Funcionario
         $this->login = $l;
     }
 
+    function setEmail($e)
+    {
+        $this->email = $e;
+    }
+
     function setSenha($s)
     {
-        $this->senha = $s;
+        $key = MD5('key-mamaezona-' . mt_rand());
+        $this->key = $key;
+        $this->senha = password_hash(hash_hmac('sha256', $s, $key), PASSWORD_ARGON2I);
     }
 
     function setAcesso($a)
@@ -64,28 +83,6 @@ class Funcionario
         $this->acesso = $a;
     }
     // --------------------------------------------------
-
-    /**
-     * Insere os dados em um objeto funcionario
-     * 
-     * @var string $nome nome do funcionario
-     * 
-     * @var string $login nome do usuario no sistema
-     * 
-     * @var string $senha senhado usuario
-     * 
-     * @var string $acesso define nivel de acesso de usuário
-     * 
-     * @return void
-     */
-    function dadosFuncionario($nome, $login, $senha, $acesso = 'CM')
-    {
-        $this->setNome($nome);
-        $this->setLogin($login);
-        $this->setSenha($senha);
-        $this->setAcesso($acesso);
-    }
-
     /**
      * Realiza o login do usuário, caso o login e a senha estejam corretos,
      * abre uma sessão para o usuario.
@@ -94,21 +91,21 @@ class Funcionario
      * @param string $senha senha do usuario
      * @return void
      */
-    function logar($login, $senha)
+    function logar($login, $email, $senha)
     {
         require_once "../../model/pdo.Banco.class.php";
         global $bd;
-        $dados = $bd->login($login, $senha);
-        if ($dados == 1) {
-            $dados = $bd->selectFuncionario($login, $senha);
-            print_r($dados);
+        $dados = $bd->login($login, $email, $senha);
+        echo '<pre>' . print_r($dados) . '</pre>';
+        if ($dados['verificacao'] == 1) {
             session_start();
             $_SESSION['login'] = $login;
-            $_SESSION['senha'] = $senha;
-            $_SESSION['acesso'] = $dados[4];
-            if ($_SESSION['acesso'] == "CM") {
+            $_SESSION['email'] = $email;
+            $_SESSION['passHash'] = hash_hmac('sha256', $senha, $dados['key']);
+            $_SESSION['acesso'] = $dados['acesso'];
+            if ($_SESSION['acesso'] == 'CM') {
                 header("location: ../../view/funcionario/funcionario.Usuario.php");
-            } else if ($_SESSION['acesso'] == "US") {
+            } else if ($_SESSION['acesso'] == 'US') {
                 header("location: ../../view/funcionario/funcionario.Gerente.php");
             } else {
                 session_destroy();
@@ -132,17 +129,38 @@ class Funcionario
         if (!isset($_SESSION)) {
             header("../../view/logar.php");
         } else {
-
-            if (!isset($_SESSION['login']) && !isset($_SESSION['senha'])) {
+            if (!isset($_SESSION['login']) && !isset($_SESSION['email'])) {
+                session_destroy();
                 header("../../view/logar.php");
             } else {
-                $dados = $bd->selectFuncionario($_SESSION['login'], $_SESSION['senha']);
-                if ($dados[2] != $_SESSION['login'] || $dados[3] != $_SESSION['senha']) {
+                $dados = $bd->log_bd_test($_SESSION['login'], $_SESSION['email'], $_SESSION['passHash']);
+                if ($dados['login'] != $_SESSION['login'] || $dados['email'] != $_SESSION['email'] || $dados['senha'] != true) {
                     session_destroy();
                     header("../../view/logar.php");
                 }
             }
         }
+    }
+    /**
+     * Insere os dados em um objeto funcionario
+     * 
+     * @var string $nome nome do funcionario
+     * 
+     * @var string $login nome do usuario no sistema
+     * 
+     * @var string $senha senhado usuario
+     * 
+     * @var string $acesso define nivel de acesso de usuário
+     * 
+     * @return void
+     */
+    function dadosFuncionario($nome, $login, $email, $senha, $acesso = 'CM')
+    {
+        $this->setNome($nome);
+        $this->setLogin($login);
+        $this->setEmail($email);
+        $this->setSenha($senha);
+        $this->setAcesso($acesso);
     }
 
     /**
@@ -158,10 +176,10 @@ class Funcionario
      * 
      * @return void
      */
-    function salvarFuncionario($nome, $login, $senha, $acesso = 'CM')
+    function salvarFuncionario($nome, $login, $email, $senha, $acesso = 'CM')
     {
         global $bd;
-        $this->dadosFuncionario($nome, $login, $senha, $acesso);
+        $this->dadosFuncionario($nome, $login, $email, $senha, $acesso);
         $bd->insertFuncionario($this);
     }
 }
