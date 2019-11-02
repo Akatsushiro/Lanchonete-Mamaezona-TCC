@@ -10,11 +10,11 @@ class Funcionario
 {
     /**
      * @var string $nome nome do funcionario
-     * 
+     *
      * @var string $login nome do usuario no sistema
-     * 
+     *
      * @var string $senha senhado usuario
-     * 
+     *
      * @var string $acesso define nivel de acesso de usuário
      */
     private $nome;
@@ -97,7 +97,7 @@ class Funcionario
         global $bd;
         $dados = $bd->login($login, $email, $senha);
         echo '<pre>' . print_r($dados) . '</pre>';
-        if ($dados['verificacao'] == 1) {
+        if ($dados['verificacao'] == 1 && $dados['log_teste'] == True) {
             session_start();
             $_SESSION['login'] = $login;
             $_SESSION['email'] = $email;
@@ -125,33 +125,34 @@ class Funcionario
     function log_teste()
     {
         global $bd;
-
         if (!isset($_SESSION)) {
-            header("../../view/logar.php");
+            echo '----------------bdfsdgvjdfg';
+            //header("Location: ../../view/login.php");
         } else {
-            if (!isset($_SESSION['login']) && !isset($_SESSION['email'])) {
+            if (!isset($_SESSION['login']) || !isset($_SESSION['email'])) {
+                echo 'login não existe';
                 session_destroy();
-                header("../../view/logar.php");
+                header("Location: ../../view/login.php");
             } else {
                 $dados = $bd->log_bd_test($_SESSION['login'], $_SESSION['email'], $_SESSION['passHash']);
                 if ($dados['login'] != $_SESSION['login'] || $dados['email'] != $_SESSION['email'] || $dados['senha'] != true) {
                     session_destroy();
-                    header("../../view/logar.php");
+                    header("Location: ../../view/login.php");
                 }
             }
         }
     }
     /**
      * Insere os dados em um objeto funcionario
-     * 
+     *
      * @var string $nome nome do funcionario
-     * 
+     *
      * @var string $login nome do usuario no sistema
-     * 
+     *
      * @var string $senha senhado usuario
-     * 
+     *
      * @var string $acesso define nivel de acesso de usuário
-     * 
+     *
      * @return void
      */
     function dadosFuncionario($nome, $login, $email, $senha, $acesso = 'CM')
@@ -165,15 +166,15 @@ class Funcionario
 
     /**
      * Verifica os dados do funcionário antes de inserir no objeto, caso corretos o os envia para serem salvos no banco.
-     * 
+     *
      * @var string $nome nome do funcionario
-     * 
+     *
      * @var string $login nome do usuario no sistema
-     * 
+     *
      * @var string $senha senhado usuario
-     * 
+     *
      * @var string $acesso define nivel de acesso de usuário
-     * 
+     *
      * @return void
      */
     function salvarFuncionario($nome, $login, $email, $senha, $acesso = 'CM')

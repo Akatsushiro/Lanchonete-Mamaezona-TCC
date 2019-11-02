@@ -3,7 +3,7 @@ require_once "../../model/pdo.Banco.class.php";
 require_once "../../model/funcionario/funcionario.class.php";
 /**
  * Classe responsável pelas alterações no banco na tabela funcionarios
- * 
+ *
  * @copyright (c) 2019, ETEC Jardim Ângela.
  */
 class Table_Funcionario extends Banco
@@ -47,13 +47,13 @@ class Table_Funcionario extends Banco
 
     /**
      * Realiza a verificação da senha.
-     * 
+     *
      * @param string $pass Senha do usuário.
-     * 
+     *
      * @param string $passDB Senha armazenada no Banco.
-     * 
+     *
      * @param string $key Chave de verificação de senha.
-     * 
+     *
      * @return bool Retorna true caso a senha esteja correta, e false se errada.
      */
     function pass_decrypt($pass, $passDB, $key)
@@ -84,23 +84,23 @@ class Table_Funcionario extends Banco
      * Retorna os dados de um funcionario pelo seu id
      *
      * @param integer $id Código unico de identificação do usuário
-     * 
+     *
      * @return array Retorna um array com os seguintes dados:
-     * 
+     *
      * 0 - id do funcionario
-     * 
+     *
      * 1 - nome do funcionario
-     * 
+     *
      * 2 - login do funcionario
-     * 
+     *
      * 3 - senha do funcionario
-     * 
+     *
      * 4 - acesso
-     * 
+     *
      * 5 - data de admissão
-     * 
+     *
      * 6 - data de dispensa
-     * 
+     *
      * 7 - status
      */
     function selectFuncionario($id)
