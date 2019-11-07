@@ -56,7 +56,7 @@ class Table_Funcionario extends Banco
      *
      * @return bool Retorna true caso a senha esteja correta, e false se errada.
      */
-    function pass_decrypt($pass, $passDB, $key)
+    private function pass_decrypt($pass, $passDB, $key)
     {
         $user_pass = hash_hmac('sha256', $pass, $key);
         return password_verify($user_pass, $passDB);
@@ -148,7 +148,45 @@ class Table_Funcionario extends Banco
         global $pdo;
         $bd = new Table_Funcionario();
         $bd->conectar();
-        $sql = $pdo->prepare("UPDATE `funcionarios` SET nome = ?, login = ?, senha = ?, acesso = ? WHERE id_funcionarios = ?;");
+        $sql = $pdo->prepare("UPDATE `funcionarios` SET nome = ?, `login` = ?, senha = ?, acesso = ? WHERE id_funcionarios = ?;");
         $sql->execute(array($Funcionario->getNome(), $Funcionario->getLogin(), $Funcionario->getSenha(), $Funcionario->getAcesso(), $id));
+    }
+
+    /**
+     * Desativa um funcionario no sistema e define a data em qual foi dispensado
+     * no banco.
+     * 
+     * @param int $id Codigo do funcionario no sistema.
+     * 
+     * @return void
+     */
+    function deleteFuncionario($id)
+    {
+        date_default_timezone_set('America/Sao_Paulo');
+        $date = date('Y-m-d H:i');
+        global $pdo;
+        $bd = new Table_Funcionario();
+        $bd->conectar();
+        $sql = $pdo->prepare("UPDATE `funcionarios` SET `dispensa` = ?, `status` = 0 WHERE id_funcionarios = $id");
+        $sql->execute(array($date));
+    }
+
+    function listarFuncionarioArray()
+    {
+        global $pdo;
+        $bd = new Table_Funcionario();
+        $bd->conectar();
+        $sql = $pdo->prepare("SELECT * FROM `funcionarios`");
+        $sql->execute();
+        while ($col = $sql->fetch(PDO::FETCH_ASSOC)) {
+            $dados[] = $col['id_funcionarios'];
+            $dados[] = $col['nome'];
+            $dados[] = $col['login'];
+            $dados[] = $col['email'];
+            $dados[] = $col['acesso'];
+            $dados[] = $col['admitido'];
+            $dados[] = $col['dispensa'];
+        }
+        return "{\"data\":" . json_encode($dados) . '}';
     }
 }

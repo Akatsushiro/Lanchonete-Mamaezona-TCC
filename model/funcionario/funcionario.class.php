@@ -155,7 +155,7 @@ class Funcionario
      *
      * @return void
      */
-    function dadosFuncionario($nome, $login, $email, $senha, $acesso = 'CM')
+    private function dadosFuncionario($nome, $login, $email, $senha, $acesso = 'CM')
     {
         $this->setNome($nome);
         $this->setLogin($login);
@@ -167,13 +167,13 @@ class Funcionario
     /**
      * Verifica os dados do funcionário antes de inserir no objeto, caso corretos o os envia para serem salvos no banco.
      *
-     * @var string $nome nome do funcionario
+     * @param string $nome nome do funcionario
      *
-     * @var string $login nome do usuario no sistema
+     * @param string $login nome do usuario no sistema
      *
-     * @var string $senha senhado usuario
+     * @param string $senha senhado usuario
      *
-     * @var string $acesso define nivel de acesso de usuário
+     * @param string $acesso define nivel de acesso de usuário
      *
      * @return void
      */
@@ -182,5 +182,42 @@ class Funcionario
         global $bd;
         $this->dadosFuncionario($nome, $login, $email, $senha, $acesso);
         $bd->insertFuncionario($this);
+    }
+
+    /**
+     * Atualiza os dados de um funcionario.
+     * 
+     * @param int $id Codigo do funcionario que será atualizado.
+     * 
+     * @param string $nome nome do funcionario.
+     * 
+     * @param string $login nome do funcionario no sistema.
+     *
+     * @param string $login nome do usuario no sistema.
+     *
+     * @param string $senha senhado usuario.
+     *
+     * @param string $acesso define nivel de acesso de usuário.
+     * 
+     * @return void
+     */
+    function atualizarFuncionario($id, $nome, $login, $email = '', $senha, $acesso = 'CM')
+    {
+        global $bd;
+        $this->dadosFuncionario($nome, $login, $email, $senha, $acesso);
+        $bd->updateFuncionario($id, $this);
+    }
+
+    /**
+     * Desativa um funcionario no sistema.
+     * 
+     * @param int $id Código do funcionario.
+     * 
+     * @return void
+     */
+    function excluirFuncionario($id)
+    {
+        global $bd;
+        $bd->deleteFuncionario($id);
     }
 }

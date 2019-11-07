@@ -57,7 +57,7 @@ class Produto{
 
 // -------------- Métodos ---------------- 
 
-    function dadosProduto($nome_produto, $tipo_produto, $marca, $preco, $custo){
+    private function dadosProduto($nome_produto, $tipo_produto, $marca, $preco, $custo){
         $this->nome = $nome_produto;
         $this->tipo = $tipo_produto;
         $this->preco = $preco;
