@@ -19,7 +19,7 @@
     <center>
         <h1>Cadastrar</h1>
         <!-- formulario de cadastrar cliente  -->
-        <form action="../../controller/produto/produto.controller.php?op=update&&id=<?php echo $id?>" method="post" enctype="multipart/form-data" class="my-2">
+        <form action="../../controller/produto/produto.Atualizar.php?id=<?php echo $id?>" method="post" enctype="multipart/form-data" class="my-2">
             Nome: <input type="text" name="nome" id="" value="<?php echo $dados[0];?>">
             <br>
             <br>

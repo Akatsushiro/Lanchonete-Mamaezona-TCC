@@ -16,7 +16,7 @@
     <center>
         <h1>Cadastrar</h1>
         <!-- formulario de cadastrar cliente  -->
-        <form action="../../controller/produto/produto.controller.php?op=insert" method="post" enctype="multipart/form-data" class="my-2">
+        <form action="../../controller/produto/produto.Salvar.php?" method="post" enctype="multipart/form-data" class="my-2">
             Nome: <input type="text" name="nome" id="">
             <br>
             <br>

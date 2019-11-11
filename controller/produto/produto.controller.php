@@ -19,7 +19,6 @@ if ($op == 'delete') {
     } elseif ($op == 'update') {
         $id = addslashes(trim($_GET['id']));
         $produto->alterarProduto($id, $nome, $tipo, $marca, $preco, $custo);
-        echo 'olá';
     }
 }
 header("Location: ../../view/produto/produtos.Main.php");

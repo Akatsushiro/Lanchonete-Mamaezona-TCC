@@ -124,7 +124,7 @@ class Table_Produto extends Banco
                     <td>$estoque</td>
                     <td>$custo</td>
                     <td>$status</td>
-                    <td><a href='../../controller/produto/produto.controller.php?op=delete&&id=$id'>Excluir</a></td>
+                    <td><a href='../../controller/produto/produto.Excluir.php?id=$id'>Excluir</a></td>
                 </tr>";
         }
         echo '</table>';
