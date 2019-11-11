@@ -17,7 +17,7 @@ $vf->log_teste();
 <body>
     <center>
         <h1>Pagina do Administrador</h1>
-        <form action="../../controller/funcionario/gerente.controller.php" enctype="multipart/form-data" method="post">
+        <form action="../../controller/funcionario/funcionario.Salvar.php" enctype="multipart/form-data" method="post">
             Nome: <input type="text" name="nome" id="" required>
             <br>
             <br>

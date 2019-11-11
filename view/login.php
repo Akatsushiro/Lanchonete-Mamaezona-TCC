@@ -12,7 +12,7 @@
 <body>
     <center>
         <h1>Logar</h1>
-        <form action="../controller/funcionario/login.controller.php" enctype="multipart/form-data" method="post">
+        <form action="../controller/funcionario/funcionario.Logar.php" enctype="multipart/form-data" method="post">
             <br>
             Login: <input type="text" name="login" id="">
             <br>
