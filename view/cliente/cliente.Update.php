@@ -26,7 +26,7 @@
     <center>
         <h1>Alterar</h1>
         <!-- Formulario de atualição de cliente -->
-        <form action="../../controller/cliente/cliente.controller.php?op=update&id=<?php echo $id?>" method="post" enctype="multipart/form-data">
+        <form action="../../controller/cliente/cliente.Atualizar.php?id=<?php echo $id?>" method="post" enctype="multipart/form-data">
             Nome: <input type="text" name="nome" id="" value="<?php echo $dados[0];?>">
             <br>
             <br>

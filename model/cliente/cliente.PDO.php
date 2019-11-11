@@ -140,7 +140,7 @@ class Table_Cliente extends Banco implements iTable_Cliente
         global $pdo;
         $bd = new Table_Cliente();
         $bd->conectar();
-        $sql = $pdo->prepare("SELECT * FROM cliente ORDER BY `nome_cliente`");
+        $sql = $pdo->prepare("SELECT * FROM cliente WHERE `status_cliente` = 1 ORDER BY `nome_cliente`");
         $sql->execute();
         $i = 0;
         echo "
@@ -164,7 +164,7 @@ class Table_Cliente extends Banco implements iTable_Cliente
                     <td><a href = 'cliente.Update.php?id=$id'>$nome</a></td>
                     <td>$situacao</td>
                     <td>$descricao</td>
-                    <td><a href='../../controller/cliente/cliente.controller.php?op=delete&id=$id'>Excluir</a></td>
+                    <td><a href='../../controller/cliente/cliente.Excluir.php?id=$id'>Excluir</a></td>
                 </tr>
             ";
             $i++;
