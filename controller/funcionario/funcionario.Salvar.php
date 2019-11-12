@@ -9,4 +9,5 @@ $email = $_POST['email'];
 $senha = $_POST['senha'];
 $acesso = $_POST['acesso'];
 
-$funcionario->salvarFuncionario($nome, $login, $email,$senha, $acesso);
+$funcionario->salvarFuncionario($nome, $login, $email, $senha, $acesso);
+header("location: ../../view/login.php");
