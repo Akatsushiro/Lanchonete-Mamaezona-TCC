@@ -64,31 +64,13 @@ CREATE TABLE IF NOT EXISTS `contas` (
 /*!40000 ALTER TABLE `contas` DISABLE KEYS */;
 /*!40000 ALTER TABLE `contas` ENABLE KEYS */;
 
--- Copiando estrutura para tabela mamaezona.estoque
-CREATE TABLE IF NOT EXISTS `estoque` (
-  `id_estoque` int(11) NOT NULL AUTO_INCREMENT,
-  `nome` varchar(45) COLLATE utf8_bin NOT NULL,
-  `marca` varchar(45) COLLATE utf8_bin DEFAULT NULL,
-  `preco` decimal(6,2) NOT NULL,
-  `quantia` int(11) NOT NULL,
-  `quantia_min` int(11) NOT NULL COMMENT 'quantia minima que um produto pode ter no estoque, quando atingido esse numero devesse notificar o usuario.',
-  `status_estoque` tinyint(4) NOT NULL DEFAULT '1',
-  PRIMARY KEY (`id_estoque`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8 COLLATE=utf8_bin COMMENT='produtos de uso do estabelacimento, não podem ser vendidos.';
-
--- Copiando dados para a tabela mamaezona.estoque: ~0 rows (aproximadamente)
-/*!40000 ALTER TABLE `estoque` DISABLE KEYS */;
-INSERT INTO `estoque` (`id_estoque`, `nome`, `marca`, `preco`, `quantia`, `quantia_min`, `status_estoque`) VALUES
-	(1, 'Refrigerante 2l Guaraná', 'Dolly', 4.00, 30, 5, 0),
-	(2, 'Refrigerante 2l Laranja', 'Fanta', 6.50, 30, 5, 1);
-/*!40000 ALTER TABLE `estoque` ENABLE KEYS */;
-
 -- Copiando estrutura para tabela mamaezona.funcionarios
 CREATE TABLE IF NOT EXISTS `funcionarios` (
   `id_funcionarios` int(11) NOT NULL AUTO_INCREMENT,
   `nome` varchar(45) COLLATE utf8_bin NOT NULL,
   `login` varchar(20) COLLATE utf8_bin NOT NULL,
   `email` varchar(50) COLLATE utf8_bin NOT NULL,
+  `perfil` varchar(100) COLLATE utf8_bin NOT NULL DEFAULT '../../img/funcionario/default.img',
   `senha` varchar(150) COLLATE utf8_bin NOT NULL,
   `chave` varchar(50) COLLATE utf8_bin NOT NULL,
   `acesso` char(2) COLLATE utf8_bin NOT NULL,
@@ -101,9 +83,9 @@ CREATE TABLE IF NOT EXISTS `funcionarios` (
 
 -- Copiando dados para a tabela mamaezona.funcionarios: ~2 rows (aproximadamente)
 /*!40000 ALTER TABLE `funcionarios` DISABLE KEYS */;
-INSERT INTO `funcionarios` (`id_funcionarios`, `nome`, `login`, `email`, `senha`, `chave`, `acesso`, `admitido`, `dispensa`, `status`) VALUES
-	(1, 'Patrick', 'Akatsu', 'patrickdantas999@gmail.com', '$argon2i$v=19$m=1024,t=2,p=2$djVRNWUuUHljREg1eTF0NQ$gAyWB+oJeOAw456Bm01JBO/UeZQ+m+REehkQEt9ucdA', '5c460b07e3bdfa8665f4f73239c43cc6', 'US', '2019-11-07 13:51:56', NULL, 1),
-	(2, 'Matheus', 'Prometeus', 'mateus@felipe.og', '$argon2i$v=19$m=1024,t=2,p=2$ZjIzRzdJbWFvYVFjWnlqTA$IsqQ55v1Xcq0jWK7z7xLdK2UKchrqcY6WLyhZrYCiyA', 'ceaa4bf45850945295e2c9f8504df091', 'US', '2019-11-12 09:05:56', NULL, 1);
+INSERT INTO `funcionarios` (`id_funcionarios`, `nome`, `login`, `email`, `perfil`, `senha`, `chave`, `acesso`, `admitido`, `dispensa`, `status`) VALUES
+	(1, 'Patrick', 'Akatsu', 'patrickdantas999@gmail.com', '../../img/funcionario/default.img', '$argon2i$v=19$m=1024,t=2,p=2$djVRNWUuUHljREg1eTF0NQ$gAyWB+oJeOAw456Bm01JBO/UeZQ+m+REehkQEt9ucdA', '5c460b07e3bdfa8665f4f73239c43cc6', 'US', '2019-11-07 13:51:56', NULL, 1),
+	(2, 'Matheus', 'Prometeus', 'mateus@felipe.og', '../../img/funcionario/default.img', '$argon2i$v=19$m=1024,t=2,p=2$ZjIzRzdJbWFvYVFjWnlqTA$IsqQ55v1Xcq0jWK7z7xLdK2UKchrqcY6WLyhZrYCiyA', 'ceaa4bf45850945295e2c9f8504df091', 'US', '2019-11-12 09:05:56', NULL, 1);
 /*!40000 ALTER TABLE `funcionarios` ENABLE KEYS */;
 
 -- Copiando estrutura para tabela mamaezona.historico
@@ -111,10 +93,10 @@ CREATE TABLE IF NOT EXISTS `historico` (
   `quantia` int(11) NOT NULL,
   `vendas_id_vendas` int(11) NOT NULL,
   `produto_id_produto` int(11) NOT NULL,
-  KEY `fk_historico_produto1` (`produto_id_produto`),
-  KEY `fk_historico_vendas1` (`vendas_id_vendas`),
-  CONSTRAINT `fk_historico_produto1` FOREIGN KEY (`produto_id_produto`) REFERENCES `produto` (`id_produto`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  CONSTRAINT `fk_historico_vendas1` FOREIGN KEY (`vendas_id_vendas`) REFERENCES `vendas` (`id_vendas`) ON DELETE NO ACTION ON UPDATE NO ACTION
+  KEY `fk_historico_produto` (`produto_id_produto`),
+  KEY `fk_historico_vendas` (`vendas_id_vendas`),
+  CONSTRAINT `fk_historico_produto` FOREIGN KEY (`produto_id_produto`) REFERENCES `produto` (`id_produto`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  CONSTRAINT `fk_historico_vendas` FOREIGN KEY (`vendas_id_vendas`) REFERENCES `vendas` (`id_vendas`) ON DELETE NO ACTION ON UPDATE NO ACTION
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin COMMENT='salva os produtos que foram vendidos agrupando-os por venda.';
 
 -- Copiando dados para a tabela mamaezona.historico: ~0 rows (aproximadamente)
@@ -124,17 +106,17 @@ CREATE TABLE IF NOT EXISTS `historico` (
 -- Copiando estrutura para tabela mamaezona.produto
 CREATE TABLE IF NOT EXISTS `produto` (
   `id_produto` int(11) NOT NULL AUTO_INCREMENT,
-  `nome_produto` varchar(45) NOT NULL,
-  `tipo` varchar(15) NOT NULL COMMENT 'se é uma bebida alcolica ou se nessecita de preparo pela cozinha.',
-  `marca` varchar(20) DEFAULT NULL,
+  `nome` varchar(50) NOT NULL,
+  `marca` varchar(50) NOT NULL,
+  `imagem` varchar(50) NOT NULL DEFAULT '../../img/produto/default.jpg',
   `preco` decimal(6,2) NOT NULL,
-  `estoque_id_estoque` int(11) NOT NULL,
-  `custo` decimal(6,2) NOT NULL COMMENT 'Quanto aquele produto custa para o dono.',
-  `status_produto` tinyint(4) NOT NULL DEFAULT '1',
+  `custo` decimal(6,2) NOT NULL,
+  `quantia` int(11) NOT NULL,
+  `quantia_minima` int(11) NOT NULL,
+  `status` tinyint(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id_produto`),
-  KEY `fk_produto_estoque1` (`estoque_id_estoque`),
-  CONSTRAINT `fk_produto_estoque1` FOREIGN KEY (`estoque_id_estoque`) REFERENCES `estoque` (`id_estoque`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='produtos que podem ser vendidos.';
+  UNIQUE KEY `nome` (`nome`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- Copiando dados para a tabela mamaezona.produto: ~0 rows (aproximadamente)
 /*!40000 ALTER TABLE `produto` DISABLE KEYS */;
