@@ -108,18 +108,21 @@ CREATE TABLE IF NOT EXISTS `produto` (
   `id_produto` int(11) NOT NULL AUTO_INCREMENT,
   `nome` varchar(50) NOT NULL,
   `marca` varchar(50) NOT NULL,
-  `imagem` varchar(50) NOT NULL DEFAULT '../../img/produto/default.jpg',
+  `imagem` varchar(50) NOT NULL DEFAULT '../../img/produto/default.png',
   `preco` decimal(6,2) NOT NULL,
   `custo` decimal(6,2) NOT NULL,
   `quantia` int(11) NOT NULL,
   `quantia_minima` int(11) NOT NULL,
-  `status` tinyint(1) NOT NULL DEFAULT '0',
+  `tipo` varchar(50) NOT NULL DEFAULT 'cm',
+  `status` tinyint(1) NOT NULL DEFAULT '1',
   PRIMARY KEY (`id_produto`),
   UNIQUE KEY `nome` (`nome`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
 
 -- Copiando dados para a tabela mamaezona.produto: ~0 rows (aproximadamente)
 /*!40000 ALTER TABLE `produto` DISABLE KEYS */;
+INSERT INTO `produto` (`id_produto`, `nome`, `marca`, `imagem`, `preco`, `custo`, `quantia`, `quantia_minima`, `tipo`, `status`) VALUES
+	(1, 'Hygor', 'Descrição', '../../img/produto/hygor.png', 12.00, 32.00, 23, 43, 'sfgv', 1);
 /*!40000 ALTER TABLE `produto` ENABLE KEYS */;
 
 -- Copiando estrutura para tabela mamaezona.vendas

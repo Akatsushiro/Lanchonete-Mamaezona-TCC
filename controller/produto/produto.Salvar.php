@@ -22,4 +22,3 @@ if (move_uploaded_file($_FILES['imagem']['tmp_name'], $imgDir . $imagemF)) {
     $imagem = $imgDir . $imagemF;
     $produto->cadastroProduto($nome, $marca, $imagem, $preco, $custo, $quantia, $quantia_minima, $tipo);
 }
-//header("Location: ../../view/produto/produtos.Main.php");
