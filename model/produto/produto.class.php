@@ -3,81 +3,132 @@ require_once "../../model/produto/produto.PDO.php";
 
 $bd = new Table_Produto();
 
-interface iProduto{
+interface iProduto
+{ }
 
-}
-
-class Produto{
+class Produto
+{
     private $nome;
-    private $tipo;
     private $marca;
+    private $imagem;
     private $preco;
     private $custo;
+    private $quantia;
+    private $quantia_minima;
+    private $tipo;
 
-// -------------- GETTERS ---------------
-    function getNome(){
+    // -------------- GETTERS ---------------
+    function getNome()
+    {
         return $this->nome;
     }
 
-    function getTipo(){
-        return $this->tipo;
-    }
-
-    function getMarca(){
+    function getMarca()
+    {
         return $this->marca;
     }
 
-    function getPreco(){
+    function getimagem()
+    {
+        return $this->imagem;
+    }
+
+    function getPreco()
+    {
         return $this->preco;
     }
 
-    function getCusto(){
+    function getCusto()
+    {
         return $this->custo;
     }
-// --------- SETTERS ------------
-    function setNome($nome){
+
+    function getQuantia()
+    {
+        return $this->quantia;
+    }
+
+    function getQuantiaMinima()
+    {
+        return $this->quantia_minima;
+    }
+
+    function getTipo()
+    {
+        return $this->tipo;
+    }
+
+    // --------- SETTERS ------------
+    function setNome($nome)
+    {
         $this->nome = $nome;
     }
 
-    function setTipo($tipo){
+    function setMarca($marca)
+    {
+        $this->marca = $marca;
+    }
+
+    function setImagem($img)
+    {
+        $this->imagem = $img;
+    }
+
+    function setPreco($preco)
+    {
+        $this->preco = $preco;
+    }
+
+    function setCusto($custo)
+    {
+        $this->custo = $custo;
+    }
+
+    function setQuantia($q)
+    {
+        $this->quantia = $q;
+    }
+
+    function setQuantiaMinima($qm)
+    {
+        $this->quantia_minima = $qm;
+    }
+
+    function setTipo($tipo)
+    {
         $this->tipo = $tipo;
     }
 
-    function setMarca($marca){
-        $this->marca = $marca;
+    // -------------- Métodos ---------------- 
+
+    private function dadosProduto($nome, $marca, $imagem, $preco, $custo, $quantia, $quantia_minima, $tipo)
+    {
+        $this->setNome($nome);
+        $this->setMarca($marca);
+        $this->setImagem($imagem);
+        $this->setPreco($preco);
+        $this->setCusto($custo);
+        $this->setQuantia($quantia);
+        $this->setQuantiaMinima($quantia_minima);
+        $this->setTipo($tipo);
     }
 
-    function setPreco($preco){
-        $this->preco = $preco;
-    }
-
-    function setCusto($custo){
-        $this->custo = $custo;
-    }
-
-// -------------- Métodos ---------------- 
-
-    private function dadosProduto($nome_produto, $tipo_produto, $marca, $preco, $custo){
-        $this->nome = $nome_produto;
-        $this->tipo = $tipo_produto;
-        $this->preco = $preco;
-        $this->marca = $marca;
-        $this->custo = $custo;
-    }
-
-    function cadastroProduto($nome_produto, $tipo_produto, $marca, $preco, $custo){
+    function cadastroProduto($nome, $marca, $imagem, $preco, $custo, $quantia, $quantia_minima, $tipo)
+    {
         global $bd;
-        $this->dadosProduto($nome_produto, $tipo_produto, $marca, $preco, $custo);
+        $this->dadosProduto($nome, $marca, $imagem, $preco, $custo, $quantia, $quantia_minima, $tipo);
         $bd->insertProduto($this);
     }
 
-    function alterarProduto($id, $nome_produto, $tipo_produto, $marca, $preco, $custo){
+    function alterarProduto($id, $nome, $marca, $imagem, $preco, $custo, $quantia, $quantia_minima, $tipo)
+    {
         global $bd;
-        $this->dadosProduto($nome_produto, $tipo_produto, $marca, $preco, $custo);
+        $this->dadosProduto($nome, $marca, $imagem, $preco, $custo, $quantia, $quantia_minima, $tipo);
         $bd->updateProduto($id, $this);
     }
 
-    function excluirProduto($id){
+    function excluirProduto($id)
+    {
         global $bd;
         $bd->deleteProduto($id);
     }

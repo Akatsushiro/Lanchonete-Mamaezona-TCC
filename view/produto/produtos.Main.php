@@ -20,16 +20,25 @@
             Nome: <input type="text" name="nome" id="">
             <br>
             <br>
-            Tipo: <input type="text" name="tipo" id="">
-            <br>
-            <br>
             Marca: <Textarea name="marca">Descrição</Textarea>
+            <br>
+            <br>
+            Imagem: <input type="file" name="imagem" id="">
             <br>
             <br>
             Preço: <input type="number" name="preco" id="" step="any" min="0" max="9999">
             <br>
             <br>
             Custo: <input type="number" name="custo" id="" step="any" min="0" max="9999">
+            <br>
+            <br>
+            Quantia: <input type="number" name="quantia" id="">
+            <br>
+            <br>
+            Quantia Minima: <input type="number" name="quantia_minima" id="">
+            <br>
+            <br>
+            Tipo: <input type="text" name="tipo" id="">
             <br>
             <br>
             <input type="submit" value="Enviar">

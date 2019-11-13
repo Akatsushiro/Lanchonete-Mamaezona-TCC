@@ -12,8 +12,8 @@ class Table_Produto extends Banco
         global $pdo;
         $bd = new Table_Produto();
         $bd->conectar();
-        $sql = $pdo->prepare("INSERT INTO `produto` (`nome_produto`, `tipo`, `marca`, `preco`, `custo`) VALUES (?, ?, ?, ?, ?)");
-        $sql->execute(array($Produto->getNome(), $Produto->getTipo(), $Produto->getMarca(), $Produto->getPreco(), $Produto->getCusto()));
+        $sql = $pdo->prepare("INSERT INTO `produto` (`nome`, `marca`, `imagem`, `preco`, `custo`, `quantia`, `quantia_minima`, `tipo`) VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
+        $sql->execute(array($Produto->getNome(), $Produto->getMarca(), $Produto->getimagem(), $Produto->getPreco(), $Produto->getCusto(), $Produto->getQuantia(), $Produto->getQuantiaMinima(), $Produto->getTipo()));
         $bd->desconectar();
     }
 
@@ -22,8 +22,8 @@ class Table_Produto extends Banco
         global $pdo;
         $bd = new Table_Produto();
         $bd-> conectar();
-        $sql = $pdo->prepare("UPDATE produto SET nome_produto =?, tipo =?, marca =?, preco =?, custo =? WHERE id_produto =?");
-        $sql->execute(array($Produto->getNome(), $Produto->getTipo(), $Produto->getMarca(), $Produto->getPreco(), $Produto->getCusto(), $id));
+        $sql = $pdo->prepare("UPDATE produto SET nome = ?, marca = ?, imagem = ?, preco = ?, custo = ?, quantia = ?, quantia_minima = ?, tipo = ? WHERE id_produto = ?");
+        $sql->execute(array($Produto->getNome(), $Produto->getMarca(), $Produto->getimagem(), $Produto->getPreco(), $Produto->getCusto(), $Produto->getQuantia(), $Produto->getQuantiaMinima(), $Produto->getTipo(), $id));
         $bd->desconectar();
     }
 
@@ -35,13 +35,16 @@ class Table_Produto extends Banco
         $sql = $pdo->prepare("SELECT * FROM `produto` WHERE id_produto = ?"); 
         $sql->execute(array($id));
         while ($col = $sql->fetch(PDO::FETCH_ASSOC)){
-            $dados[] = $col ['nome_produto'];
-            $dados[] = $col ['tipo'];
-            $dados[] = $col ['marca'];
-            $dados[] = $col ['preco'];
-            $dados[] = $col ['custo'];
+            $dados['nome']           = $col['nome'];
+            $dados['marca']          = $col['marca'];
+            $dados['imagem']         = $col['imagem'];
+            $dados['preco']          = $col['preco'];
+            $dados['custo']          = $col['custo'];
+            $dados['quantia']        = $col['quantia'];
+            $dados['quantia_minima'] = $col['quantia_minima'];
+            $dados['tipo']           = $col['tipo'];
         }
-        return $dados;
+        return $dados /*json_encode($dados)*/;
         $bd->desconectar();
     }
 
@@ -54,11 +57,14 @@ class Table_Produto extends Banco
         $sql = $pdo->prepare("SELECT * FROM `produto` WHERE id_produto = ?"); 
         $sql->execute(array($id));
         while ($col = $sql->fetch(PDO::FETCH_ASSOC)){
-            $dados[] = $col ['nome_produto'];
-            $dados[] = $col ['tipo'];
-            $dados[] = $col ['marca'];
-            $dados[] = $col ['preco'];
-            $dados[] = $col ['custo'];
+            $dados['nome']           = $col['nome'];
+            $dados['marca']          = $col['marca'];
+            $dados['imagem']         = $col['imagem'];
+            $dados['preco']          = $col['preco'];
+            $dados['custo']          = $col['custo'];
+            $dados['quantia']        = $col['quantia'];
+            $dados['quantia_minima'] = $col['quantia_minima'];
+            $dados['tipo']           = $col['tipo'];
         }
         return '{\"data\":' . json_encode($dados) . '}';
         $bd->desconectar();
@@ -68,7 +74,7 @@ class Table_Produto extends Banco
         global $pdo;
         $bd = new Table_Produto();
         $bd-> conectar();
-        $sql = $pdo->prepare("UPDATE `produto` SET `status_produto` = 0 WHERE id_produto = ?");
+        $sql = $pdo->prepare("UPDATE `produto` SET `status` = 0 WHERE id_produto = ?");
         $sql->execute(array($id));
         $bd->desconectar();
     }
@@ -79,7 +85,7 @@ class Table_Produto extends Banco
         global $pdo;
         $bd = new Table_Produto();
         $bd-> conectar();
-        $sql = $pdo->prepare("SELECT `id_produto`, `nome_produto`, `tipo`, `marca`, `preco`, `estoque_id_estoque`, `custo`, `status_produto` FROM `produto` WHERE `status_produto` = 1"); 
+        $sql = $pdo->prepare("SELECT * FROM `produto` WHERE `status_produto` = 1"); 
         $sql->execute();
         $dados = $sql->fetchAll(PDO::FETCH_ASSOC);
         return "{\"data\":" . json_encode($dados) . '}';
@@ -96,33 +102,39 @@ class Table_Produto extends Banco
                 <tr class='thead-dark'>
                     <th>ID</th>
                     <th>NOME</th>
-                    <th>TIPO</th>
                     <th>MARCA</th>
+                    <th>IMAGEM</th>
                     <th>PRECO</th>
-                    <th>ESTOQUE</th>
                     <th>CUSTO</th>
+                    <th>QUANTIA</th>
+                    <th>QUANTIA MINIMA</th>
+                    <th>TIPO</th>
                     <th>STATUS</th>
-                    <th></th>
+                    <th>AÇÕES</th>
                 </tr>";
         while($col = $sql->fetch(PDO::FETCH_ASSOC)){
-            $id = $col['id_produto'];
-            $nome = $col['nome_produto'];
-            $tipo = $col['tipo'];
-            $marca = $col['marca'];
-            $preco = $col['preco'];
-            $estoque = $col['estoque_id_estoque'];
-            $custo = $col['custo'];
-            $status = $col['status_produto'];
+            $id             = $col['id_produto'];
+            $nome           = $col['nome'];
+            $marca          = $col['marca'];
+            $imagem         = $col['imagem'];
+            $preco          = $col['preco'];
+            $custo          = $col['custo'];
+            $quantia        = $col['quantia'];
+            $quantia_minima = $col['quantia_minima'];
+            $tipo           = $col['tipo'];
+            $status         = $col['status'];
 
             echo "
                 <tr>
                     <td>$id</td>
                     <td><a href='produtos.Update.php?id=$id'>$nome</a></td>
-                    <td>$tipo</td>
                     <td>$marca</td>
+                    <td>$imagem</td>
                     <td>$preco</td>
-                    <td>$estoque</td>
                     <td>$custo</td>
+                    <td>$quantia</td>
+                    <td>$quantia_minima</td>
+                    <td>$tipo</td>
                     <td>$status</td>
                     <td><a href='../../controller/produto/produto.Excluir.php?id=$id'>Excluir</a></td>
                 </tr>";
