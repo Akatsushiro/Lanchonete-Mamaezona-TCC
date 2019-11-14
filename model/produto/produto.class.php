@@ -132,4 +132,9 @@ class Produto
         global $bd;
         $bd->deleteProduto($id);
     }
+
+    function adicionarEstoque($quantia, $id){
+        global $bd;
+        $bd->updateEstoque($quantia, $id);
+    }
 }

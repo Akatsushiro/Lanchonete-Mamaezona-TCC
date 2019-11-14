@@ -93,7 +93,6 @@ class Funcionario
      */
     function logar($login, $email, $senha)
     {
-        require_once "../../model/pdo.Banco.class.php";
         global $bd;
         $dados = $bd->login($login, $email, $senha);
         echo '<pre>' . print_r($dados) . '</pre>';
@@ -112,7 +111,6 @@ class Funcionario
                 header("location: ../../view/funcionario/funcionario.Main.php");
             }
         } else {
-            session_destroy();
             header("location: ../../view/login.php");
         }
     }
@@ -122,22 +120,26 @@ class Funcionario
      *
      * @return void
      */
-    function log_teste()
+    static function log_teste()
     {
         global $bd;
         if (!isset($_SESSION)) {
-            echo '----------------bdfsdgvjdfg';
+            
             //header("Location: ../../view/login.php");
         } else {
             if (!isset($_SESSION['login']) || !isset($_SESSION['email'])) {
-                echo 'login não existe';
+                header('HTTP/1.0 401 Não Autorizado');
                 session_destroy();
                 header("Location: ../../view/login.php");
             } else {
                 $dados = $bd->log_bd_test($_SESSION['login'], $_SESSION['email'], $_SESSION['passHash']);
                 if ($dados['login'] != $_SESSION['login'] || $dados['email'] != $_SESSION['email'] || $dados['senha'] != true) {
+                    header('HTTP/1.0 401 Não Autorizado');
                     session_destroy();
                     header("Location: ../../view/login.php");
+                } else{
+                    return True;
+                    header('HTTP/1.0 200 OK');
                 }
             }
         }

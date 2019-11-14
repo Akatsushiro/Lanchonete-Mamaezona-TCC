@@ -142,4 +142,14 @@ class Table_Produto extends Banco
         echo '</table>';
         $bd->desconectar();
     }
+
+    function updateEstoque($quantia, $id){
+        global $pdo;
+        $bd = new Table_Produto();
+        $bd->conectar();
+        $sql = $pdo->prepare("UPDATE `produto` SET `quantia` = `quantia` + ? WHERE `id_produto` = ?");
+        $sql->execute(array($quantia, $id));
+        $sql = $pdo->prepare("INSERT INTO `itens_entrada` VALUES ($quantia, DEFAULT, $id)");
+        $bd->desconectar();
+    }
 }

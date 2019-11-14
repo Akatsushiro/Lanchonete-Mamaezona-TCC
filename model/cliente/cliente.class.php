@@ -2,7 +2,7 @@
 require_once "../../model/security.class.php";
 require_once "cliente.PDO.php";
 $teste_unitario = new Seguranca();
-$bd = new table_cliente();
+$bd = new Table_Cliente();
 
 interface iCliente
 {
@@ -147,5 +147,11 @@ final class Cliente implements iCliente
     {
         global $bd;
         $bd->deleteCliente($id);
+    }
+
+    function listarClienteJson(){
+        global $bd;
+        $data = $bd->listarClientesArray();
+        return json_encode($data);
     }
 }

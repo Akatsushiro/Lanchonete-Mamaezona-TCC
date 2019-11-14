@@ -1,10 +1,9 @@
 <?php
 require_once "../../model/funcionario/funcionario.class.php";
-$vf = new Funcionario();
-$vf->log_teste();
+Funcionario::log_teste();
 ?>
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-BR">
 
 <head>
     <meta charset="UTF-8">
@@ -38,6 +37,10 @@ $vf->log_teste();
             <br>
             <input type="submit" class='btn-primary' value="Contratar">
         </form>
+        <a href="../../view/cliente/cliente.Main.php">Clientes</a>
+        <br>
+        <br>
+        <a href="../../view/cliente/produtos.Main.php">Produtos</a>
     </center>
 </body>
 

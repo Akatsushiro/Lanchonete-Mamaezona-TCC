@@ -1,7 +1,6 @@
 <?php
 require_once "../../model/security.class.php";
 require_once "../../model/pdo.Banco.class.php";
-require_once "../../model/cliente/cliente.PDO.php";
 
 // Classe de CRUD da tabela Cliente
 $verificar = new Seguranca();
@@ -129,7 +128,7 @@ class Table_Cliente extends Banco implements iTable_Cliente
         $sql = $pdo->prepare("SELECT * FROM cliente WHERE `status_cliente` = 1 ORDER BY `nome_cliente`");
         $sql->execute();
         $dados = $sql->fetchAll(PDO::FETCH_ASSOC);
-        return json_encode($dados);
+        return $dados;
     }
 
     /**

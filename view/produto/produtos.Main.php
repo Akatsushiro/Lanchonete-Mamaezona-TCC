@@ -1,3 +1,7 @@
+<?php
+require_once "../../model/funcionario/funcionario.class.php";
+Funcionario::log_teste();
+?>
 <!DOCTYPE html>
 <html lang="pt-BR">
 

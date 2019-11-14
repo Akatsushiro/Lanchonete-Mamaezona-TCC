@@ -1,3 +1,7 @@
+<?php
+require_once "../../model/funcionario/funcionario.class.php";
+Funcionario::log_teste();
+?>
 <!DOCTYPE html>
 <html lang="pt-BR">
 
@@ -35,7 +39,7 @@
         require_once "../../model/cliente/cliente.PDO.php";
         // listar clientes existentes
         $listar = new Table_Cliente();
-        $dados = "{ \"data\": " . $listar->listarClientesArray(). "}";
+        $dados = "{ \"data\": " . json_encode($listar->listarClientesArray()). "}";
         $list = $listar->listarClientes();
         echo "$dados";
         ?>

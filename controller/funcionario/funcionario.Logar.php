@@ -9,5 +9,3 @@ $senha = $_POST['senha'];
 $log = new Funcionario();
 echo 'olá';
 $log->logar($login, $email, $senha);
-
-header("location: ../../view/login.php");

@@ -46,7 +46,7 @@ abstract class Banco
             global $msg;
             $msg = $erro->getMessage();
             return $msg;
-            echo $msg;
+            header('HTTP/1.0 410 GONE');
         }
     }
     /**
