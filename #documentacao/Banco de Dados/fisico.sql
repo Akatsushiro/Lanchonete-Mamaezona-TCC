@@ -28,7 +28,7 @@ CREATE TABLE IF NOT EXISTS `cliente` (
   PRIMARY KEY (`id_cliente`)
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COLLATE=utf8_bin COMMENT='Salva os clientes.\\nstatus representa se o cliente está ativo ou desativo.';
 
--- Copiando dados para a tabela mamaezona.cliente: ~0 rows (aproximadamente)
+-- Copiando dados para a tabela mamaezona.cliente: ~1 rows (aproximadamente)
 /*!40000 ALTER TABLE `cliente` DISABLE KEYS */;
 INSERT INTO `cliente` (`id_cliente`, `nome_cliente`, `situacao`, `descricao`, `data_cliente`, `status_cliente`, `tipo_cliente`) VALUES
 	(1, 'Akatsu', 'N', 'Rua da frente', '2019-11-11 14:34:37', 0, 'C');
@@ -38,11 +38,11 @@ INSERT INTO `cliente` (`id_cliente`, `nome_cliente`, `situacao`, `descricao`, `d
 CREATE TABLE IF NOT EXISTS `consumo_interno` (
   `data` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `funcionarios_id_funcionarios` int(11) NOT NULL,
-  `vendas_id_vendas` int(11) NOT NULL,
-  KEY `fk_consumo_interno_funcionarios1` (`funcionarios_id_funcionarios`),
-  KEY `fk_consumo_interno_vendas1` (`vendas_id_vendas`),
-  CONSTRAINT `fk_consumo_interno_funcionarios1` FOREIGN KEY (`funcionarios_id_funcionarios`) REFERENCES `funcionarios` (`id_funcionarios`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  CONSTRAINT `fk_consumo_interno_vendas1` FOREIGN KEY (`vendas_id_vendas`) REFERENCES `vendas` (`id_vendas`) ON DELETE NO ACTION ON UPDATE NO ACTION
+  `pedido_id_pedido` int(11) NOT NULL,
+  KEY `fk_consumo_interno_funcionarios` (`funcionarios_id_funcionarios`),
+  KEY `fk_consumo_interno_pedido` (`pedido_id_pedido`),
+  CONSTRAINT `fk_consumo_interno_funcionarios` FOREIGN KEY (`funcionarios_id_funcionarios`) REFERENCES `funcionarios` (`id_funcionarios`),
+  CONSTRAINT `fk_consumo_interno_pedido` FOREIGN KEY (`pedido_id_pedido`) REFERENCES `pedido` (`id_produto`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin COMMENT='vendas que vão para a conta do estabelecimento.';
 
 -- Copiando dados para a tabela mamaezona.consumo_interno: ~0 rows (aproximadamente)
@@ -52,12 +52,12 @@ CREATE TABLE IF NOT EXISTS `consumo_interno` (
 -- Copiando estrutura para tabela mamaezona.contas
 CREATE TABLE IF NOT EXISTS `contas` (
   `cliente_id_cliente` int(11) NOT NULL,
-  `vendas_id_vendas` int(11) NOT NULL,
+  `pedido_id_pedido` int(11) NOT NULL,
   `data_mensal` timestamp NULL DEFAULT NULL,
   KEY `fk_contas_cliente` (`cliente_id_cliente`),
-  KEY `fk_contas_vendas1` (`vendas_id_vendas`),
-  CONSTRAINT `fk_contas_cliente` FOREIGN KEY (`cliente_id_cliente`) REFERENCES `cliente` (`id_cliente`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  CONSTRAINT `fk_contas_vendas1` FOREIGN KEY (`vendas_id_vendas`) REFERENCES `vendas` (`id_vendas`) ON DELETE NO ACTION ON UPDATE NO ACTION
+  KEY `fk_contas_pedido` (`pedido_id_pedido`),
+  CONSTRAINT `fk_contas_cliente` FOREIGN KEY (`cliente_id_cliente`) REFERENCES `cliente` (`id_cliente`),
+  CONSTRAINT `fk_contas_pedido` FOREIGN KEY (`pedido_id_pedido`) REFERENCES `pedido` (`id_pedido`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin COMMENT='salva somente clientes que estão devendo.';
 
 -- Copiando dados para a tabela mamaezona.contas: ~0 rows (aproximadamente)
@@ -88,20 +88,48 @@ INSERT INTO `funcionarios` (`id_funcionarios`, `nome`, `login`, `email`, `perfil
 	(2, 'Matheus', 'Prometeus', 'mateus@felipe.og', '../../img/funcionario/default.img', '$argon2i$v=19$m=1024,t=2,p=2$ZjIzRzdJbWFvYVFjWnlqTA$IsqQ55v1Xcq0jWK7z7xLdK2UKchrqcY6WLyhZrYCiyA', 'ceaa4bf45850945295e2c9f8504df091', 'US', '2019-11-12 09:05:56', NULL, 1);
 /*!40000 ALTER TABLE `funcionarios` ENABLE KEYS */;
 
--- Copiando estrutura para tabela mamaezona.historico
-CREATE TABLE IF NOT EXISTS `historico` (
+-- Copiando estrutura para tabela mamaezona.itens_entrada
+CREATE TABLE IF NOT EXISTS `itens_entrada` (
   `quantia` int(11) NOT NULL,
-  `vendas_id_vendas` int(11) NOT NULL,
+  `data` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `produto_id_produto` int(11) NOT NULL,
+  KEY `fk_itens_entrada` (`produto_id_produto`),
+  CONSTRAINT `fk_itens_entrada` FOREIGN KEY (`produto_id_produto`) REFERENCES `produto` (`id_produto`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- Copiando dados para a tabela mamaezona.itens_entrada: ~0 rows (aproximadamente)
+/*!40000 ALTER TABLE `itens_entrada` DISABLE KEYS */;
+/*!40000 ALTER TABLE `itens_entrada` ENABLE KEYS */;
+
+-- Copiando estrutura para tabela mamaezona.itens_vendidos
+CREATE TABLE IF NOT EXISTS `itens_vendidos` (
+  `quantia` int(11) NOT NULL,
+  `pedido_id_pedido` int(11) NOT NULL,
   `produto_id_produto` int(11) NOT NULL,
   KEY `fk_historico_produto` (`produto_id_produto`),
-  KEY `fk_historico_vendas` (`vendas_id_vendas`),
-  CONSTRAINT `fk_historico_produto` FOREIGN KEY (`produto_id_produto`) REFERENCES `produto` (`id_produto`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  CONSTRAINT `fk_historico_vendas` FOREIGN KEY (`vendas_id_vendas`) REFERENCES `vendas` (`id_vendas`) ON DELETE NO ACTION ON UPDATE NO ACTION
+  KEY `fk_historico_pedido` (`pedido_id_pedido`),
+  CONSTRAINT `fk_historico_produto` FOREIGN KEY (`produto_id_produto`) REFERENCES `produto` (`id_produto`),
+  CONSTRAINT `fk_historico_pedido` FOREIGN KEY (`pedido_id_pedido`) REFERENCES `pedido` (`id_pedido`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin COMMENT='salva os produtos que foram vendidos agrupando-os por venda.';
 
--- Copiando dados para a tabela mamaezona.historico: ~0 rows (aproximadamente)
-/*!40000 ALTER TABLE `historico` DISABLE KEYS */;
-/*!40000 ALTER TABLE `historico` ENABLE KEYS */;
+-- Copiando dados para a tabela mamaezona.itens_vendidos: ~0 rows (aproximadamente)
+/*!40000 ALTER TABLE `itens_vendidos` DISABLE KEYS */;
+/*!40000 ALTER TABLE `itens_vendidos` ENABLE KEYS */;
+
+-- Copiando estrutura para tabela mamaezona.pedido
+CREATE TABLE IF NOT EXISTS `pedido` (
+  `id_pedido` int(11) NOT NULL AUTO_INCREMENT,
+  `data` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `valor` decimal(6,2) NOT NULL,
+  `tipo` varchar(10) NOT NULL COMMENT 'salva se a venda foi a dinheiro, credito ou debito.',
+  `desconto` decimal(6,2) DEFAULT NULL,
+  `acrescimo` decimal(6,2) DEFAULT NULL,
+  PRIMARY KEY (`id_pedido`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- Copiando dados para a tabela mamaezona.pedido: ~0 rows (aproximadamente)
+/*!40000 ALTER TABLE `pedido` DISABLE KEYS */;
+/*!40000 ALTER TABLE `pedido` ENABLE KEYS */;
 
 -- Copiando estrutura para tabela mamaezona.produto
 CREATE TABLE IF NOT EXISTS `produto` (
@@ -119,26 +147,11 @@ CREATE TABLE IF NOT EXISTS `produto` (
   UNIQUE KEY `nome` (`nome`)
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
 
--- Copiando dados para a tabela mamaezona.produto: ~0 rows (aproximadamente)
+-- Copiando dados para a tabela mamaezona.produto: ~1 rows (aproximadamente)
 /*!40000 ALTER TABLE `produto` DISABLE KEYS */;
 INSERT INTO `produto` (`id_produto`, `nome`, `marca`, `imagem`, `preco`, `custo`, `quantia`, `quantia_minima`, `tipo`, `status`) VALUES
 	(1, 'Hygor', 'Descrição', '../../img/produto/hygor.png', 12.00, 32.00, 23, 43, 'sfgv', 1);
 /*!40000 ALTER TABLE `produto` ENABLE KEYS */;
-
--- Copiando estrutura para tabela mamaezona.vendas
-CREATE TABLE IF NOT EXISTS `vendas` (
-  `id_vendas` int(11) NOT NULL AUTO_INCREMENT,
-  `data` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `valor` decimal(6,2) NOT NULL,
-  `tipo` varchar(10) NOT NULL COMMENT 'salva se a venda foi a dinheiro, credito ou debito.',
-  `desconto` decimal(6,2) DEFAULT NULL,
-  `acrescimo` decimal(6,2) DEFAULT NULL,
-  PRIMARY KEY (`id_vendas`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
--- Copiando dados para a tabela mamaezona.vendas: ~0 rows (aproximadamente)
-/*!40000 ALTER TABLE `vendas` DISABLE KEYS */;
-/*!40000 ALTER TABLE `vendas` ENABLE KEYS */;
 
 /*!40101 SET SQL_MODE=IFNULL(@OLD_SQL_MODE, '') */;
 /*!40014 SET FOREIGN_KEY_CHECKS=IF(@OLD_FOREIGN_KEY_CHECKS IS NULL, 1, @OLD_FOREIGN_KEY_CHECKS) */;
