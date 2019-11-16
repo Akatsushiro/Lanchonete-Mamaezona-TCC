@@ -41,7 +41,7 @@ abstract class Banco
     {
         global $pdo;
         try {
-            $pdo = new PDO("mysql:dbname=" . $nome . "; host=" . $host . ";charset=utf8", $usuario, $senha);
+            $pdo = new PDO("mysql:dbname=" . $nome . "; host=" . $host, $usuario, $senha, array(PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES \'UTF8\''));
         } catch (PDOException $erro) {
             global $msg;
             $msg = $erro->getMessage();

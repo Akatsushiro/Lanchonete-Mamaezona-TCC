@@ -17,7 +17,7 @@ interface iCliente
     public function setTipo($t);
 
     public function cadastroCliente($nome, $situacao, $descricao, $tipo);
-    public function atualizarCliente($id, $nome, $situacao, $descricao, $tipo);
+    public function atualizarCliente($id, $nome, $situacao, $descricao, $tipo, $status);
     public function excluirCliente($id);
 }
 /**
@@ -31,6 +31,7 @@ final class Cliente implements iCliente
     private $situacao;
     private $descricao;
     private $tipo;
+    private $status;
 
     // Getters
 
@@ -54,6 +55,11 @@ final class Cliente implements iCliente
         return $this->tipo;
     }
 
+    function getStatus()
+    {
+        return $this->status;
+    }
+
     // Setters
 
     function setNome($n)
@@ -64,7 +70,13 @@ final class Cliente implements iCliente
 
     function setSituacao($s)
     {
-        $this->situacao = $s;
+        if ($s == 1) {
+            $this->situacao = 'Em dia';
+        } else if ($s == 3) {
+            $this->situacao = 'Em débito';
+        } else if ($s == 2) {
+            $this->situacao = 'Em aberto';
+        }
     }
 
 
@@ -75,7 +87,20 @@ final class Cliente implements iCliente
 
     function setTipo($t)
     {
-        $this->tipo = $t;
+        if ($t == 1) {
+            $this->tipo = 'Comum';
+        } else if ($t == 2) {
+            $this->tipo = 'Mensal';
+        }
+    }
+
+    function setStatus($s)
+    {
+        if ($s == 1) {
+            $this->status = 'Ativo';
+        } else if ($s = 2) {
+            $this->status = 'Desativo';
+        }
     }
 
     // ----------------------------------------------------------------
@@ -91,12 +116,13 @@ final class Cliente implements iCliente
      * 
      * @param string $tipo Se o cliente é 'C' Comum ou 'M' Mensal.
      */
-    private function dadosCliente($nome, $situacao, $descricao, $tipo)
+    private function dadosCliente($nome, $situacao, $descricao, $tipo, $status = 1)
     {
         $this->setNome($nome);
         $this->setSituacao($situacao);
         $this->setDescricao($descricao);
         $this->setTipo($tipo);
+        $this->setStatus($status);
     }
 
     /**
@@ -116,9 +142,11 @@ final class Cliente implements iCliente
         global $bd;
         global $teste_unitario;
         $this->dadosCliente($nome, $situacao, $descricao, $tipo);
-        if ($teste_unitario->clienteTestes($this)) {
-            $bd->insertCliente($this);
-        }
+        //if ($teste_unitario->clienteTestes($this)) {
+        $bd->insertCliente($this);
+        //} else {
+        //echo 'Falhou no teste Unitario';
+        //}
     }
 
     /**
@@ -132,10 +160,10 @@ final class Cliente implements iCliente
      * 
      * @param string $tipo Se o cliente é 'C' Comum ou 'M' Mensal.
      */
-    final function atualizarCliente($id, $nome, $situacao, $descricao, $tipo)
+    final function atualizarCliente($id, $nome, $situacao, $descricao, $tipo, $status)
     {
         global $bd;
-        $this->dadosCliente($nome, $situacao, $descricao, $tipo);
+        $this->dadosCliente($nome, $situacao, $descricao, $tipo, $status);
         $bd->updateCliente($id, $this);
     }
     /**
@@ -146,12 +174,29 @@ final class Cliente implements iCliente
     final function excluirCliente($id)
     {
         global $bd;
-        $bd->deleteCliente($id);
+        foreach ($id as $key => $value) {
+            $bd->deleteCliente($value);
+        }
+        
     }
 
-    function listarClienteJson(){
+    function listarClienteJson()
+    {
         global $bd;
-        $data = $bd->listarClientesArray();
-        return json_encode($data);
+        $data['data'] = $bd->listarClientesArray();
+        return json_encode($data, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
+    }
+
+    function alterarStatus($op, $id)
+    {
+        global $bd;
+        switch ($op) {
+            case 1:
+                $bd->ativarCliente($id);
+                break;
+            case 2:
+                $bd->desativarCliente($id);
+                break;
+        }
     }
 }
