@@ -142,11 +142,11 @@ final class Cliente implements iCliente
         global $bd;
         global $teste_unitario;
         $this->dadosCliente($nome, $situacao, $descricao, $tipo);
-        //if ($teste_unitario->clienteTestes($this)) {
-        $bd->insertCliente($this);
-        //} else {
-        //echo 'Falhou no teste Unitario';
-        //}
+        if ($teste_unitario->clienteTestes($this)) {
+            $bd->insertCliente($this);
+        } else {
+            header("HTTP/1.0 400 Inválida");
+        }
     }
 
     /**
@@ -163,13 +163,20 @@ final class Cliente implements iCliente
     final function atualizarCliente($id, $nome, $situacao, $descricao, $tipo, $status)
     {
         global $bd;
+        global $teste_unitario;
         $this->dadosCliente($nome, $situacao, $descricao, $tipo, $status);
-        $bd->updateCliente($id, $this);
+        if($teste_unitario->clienteTestes($this)){
+            $bd->updateCliente($id, $this);
+        } else {
+            header("HTTP/1.0 400 Inválida");
+        }
     }
     /**
      * Desativa um cliente na base de dados.
      * 
      * @param int $id ID do cliente no banco.
+     * 
+     * @return void
      */
     final function excluirCliente($id)
     {
@@ -177,7 +184,6 @@ final class Cliente implements iCliente
         foreach ($id as $key => $value) {
             $bd->deleteCliente($value);
         }
-        
     }
 
     function listarClienteJson()

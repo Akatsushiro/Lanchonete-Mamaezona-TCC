@@ -1,9 +1,5 @@
 <?php
-
-require_once "../../model/security.class.php";
 require_once "../../model/pdo.Banco.class.php";
-require_once "../../model/produto/produto.PDO.php";
-
 
 class Table_Produto extends Banco
 {
@@ -21,7 +17,7 @@ class Table_Produto extends Banco
     {
         global $pdo;
         $bd = new Table_Produto();
-        $bd-> conectar();
+        $bd->conectar();
         $sql = $pdo->prepare("UPDATE produto SET nome = ?, marca = ?, imagem = ?, preco = ?, custo = ?, quantia = ?, quantia_minima = ?, tipo = ? WHERE id_produto = ?");
         $sql->execute(array($Produto->getNome(), $Produto->getMarca(), $Produto->getimagem(), $Produto->getPreco(), $Produto->getCusto(), $Produto->getQuantia(), $Produto->getQuantiaMinima(), $Produto->getTipo(), $id));
         $bd->desconectar();
@@ -31,10 +27,10 @@ class Table_Produto extends Banco
     {
         global $pdo;
         $bd = new Table_Produto();
-        $bd-> conectar();
-        $sql = $pdo->prepare("SELECT * FROM `produto` WHERE id_produto = ?"); 
+        $bd->conectar();
+        $sql = $pdo->prepare("SELECT * FROM `produto` WHERE id_produto = ?");
         $sql->execute(array($id));
-        while ($col = $sql->fetch(PDO::FETCH_ASSOC)){
+        while ($col = $sql->fetch(PDO::FETCH_ASSOC)) {
             $dados['nome']           = $col['nome'];
             $dados['marca']          = $col['marca'];
             $dados['imagem']         = $col['imagem'];
@@ -48,15 +44,16 @@ class Table_Produto extends Banco
         $bd->desconectar();
     }
 
+
     //Retorna o produto para o AJAX em Json
     function selectProdutoJson($id)
     {
         global $pdo;
         $bd = new Table_Produto();
-        $bd-> conectar();
-        $sql = $pdo->prepare("SELECT * FROM `produto` WHERE id_produto = ?"); 
+        $bd->conectar();
+        $sql = $pdo->prepare("SELECT * FROM `produto` WHERE id_produto = ?");
         $sql->execute(array($id));
-        while ($col = $sql->fetch(PDO::FETCH_ASSOC)){
+        while ($col = $sql->fetch(PDO::FETCH_ASSOC)) {
             $dados['nome']           = $col['nome'];
             $dados['marca']          = $col['marca'];
             $dados['imagem']         = $col['imagem'];
@@ -70,33 +67,36 @@ class Table_Produto extends Banco
         $bd->desconectar();
     }
 
-    function deleteProduto($id){
+    function deleteProduto($id)
+    {
         global $pdo;
         $bd = new Table_Produto();
-        $bd-> conectar();
-        $sql = $pdo->prepare("UPDATE `produto` SET `status` = 0 WHERE id_produto = ?");
+        $bd->conectar();
+        $sql = $pdo->prepare("UPDATE `produto` SET `status` = 'Desativo' WHERE id_produto = ?");
         $sql->execute(array($id));
         $bd->desconectar();
     }
 
 
     //Retorna um array com os produtos ativos para o AJAX
-    function listarProdutosArray(){
+    function listarProdutosArray()
+    {
         global $pdo;
         $bd = new Table_Produto();
-        $bd-> conectar();
-        $sql = $pdo->prepare("SELECT * FROM `produto` WHERE `status_produto` = 1"); 
+        $bd->conectar();
+        $sql = $pdo->prepare("SELECT id_produto, nome, marca, tipo, quantia, quantia_minima, custo, preco FROM `produto` WHERE `status` = 'Ativo'");
         $sql->execute();
-        $dados = $sql->fetchAll(PDO::FETCH_ASSOC);
-        return "{\"data\":" . json_encode($dados) . '}';
+        $dados = $sql->fetchAll();
+        return $dados;
         $bd->desconectar();
     }
 
-    function listarProduto(){
+    function listarProduto()
+    {
         global $pdo;
         $bd = new Table_Produto();
-        $bd-> conectar();
-        $sql = $pdo->prepare("SELECT `id_produto`, `nome_produto`, `tipo`, `marca`, `preco`, `estoque_id_estoque`, `custo`, `status_produto` FROM `produto` WHERE `status_produto` = 1"); 
+        $bd->conectar();
+        $sql = $pdo->prepare("SELECT `id_produto`, `nome_produto`, `tipo`, `marca`, `preco`, `estoque_id_estoque`, `custo`, `status_produto` FROM `produto` WHERE `status_produto` = 1");
         $sql->execute();
         echo "<table class='table table-bordered table-striped text-center container'>
                 <tr class='thead-dark'>
@@ -112,7 +112,7 @@ class Table_Produto extends Banco
                     <th>STATUS</th>
                     <th>AÇÕES</th>
                 </tr>";
-        while($col = $sql->fetch(PDO::FETCH_ASSOC)){
+        while ($col = $sql->fetch(PDO::FETCH_ASSOC)) {
             $id             = $col['id_produto'];
             $nome           = $col['nome'];
             $marca          = $col['marca'];
@@ -143,13 +143,39 @@ class Table_Produto extends Banco
         $bd->desconectar();
     }
 
-    function updateEstoque($quantia, $id){
+    function updateEstoque($quantia, $id)
+    {
         global $pdo;
         $bd = new Table_Produto();
         $bd->conectar();
         $sql = $pdo->prepare("UPDATE `produto` SET `quantia` = `quantia` + ? WHERE `id_produto` = ?");
         $sql->execute(array($quantia, $id));
         $sql = $pdo->prepare("INSERT INTO `itens_entrada` VALUES ($quantia, DEFAULT, $id)");
+        $bd->desconectar();
+    }
+
+    function produtoNome($nome)
+    {
+        global $pdo;
+        $bd = new Table_Produto();
+        $bd->conectar();
+        $sql = $pdo->prepare("SELECT * FROM `produto` WHERE nome = ?");
+        $sql->execute(array($nome));
+        $data = $sql->rowCount();
+        if ($data == 0) {
+            return false;
+        } else if ($data == 1) {
+            while($col = $sql->fetch(PDO::FETCH_ASSOC)){
+                $id = $col['id_produto'];
+                $tipo = $col['tipo'];
+            }
+            if($tipo == 'Preparo'){
+                echo '#AdiçãoInvalidaPreparo#';
+                return -1;
+            } else {
+                return $id;
+            }
+        }
         $bd->desconectar();
     }
 }

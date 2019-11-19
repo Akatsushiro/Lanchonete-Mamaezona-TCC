@@ -192,8 +192,11 @@ class Table_Cliente extends Banco implements iTable_Cliente
         $sql = $pdo->prepare("SELECT * FROM `cliente` WHERE nome_cliente = ?");
         $sql->execute(array($nome));
         $data = $sql->rowCount();
+        while($col = $pdo->fetchAll(PDO::FETCH_ASSOC)){
+            $id = $col['id_produto'];
+        }
         if ($data == 0) {
-            return true;
+            return $id;
         } else {
             return false;
         }
