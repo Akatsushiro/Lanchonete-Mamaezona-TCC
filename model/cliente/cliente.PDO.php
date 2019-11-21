@@ -4,7 +4,9 @@ require_once "../../model/pdo.Banco.class.php";
 
 // Classe de CRUD da tabela Cliente
 $verificar = new Seguranca();
-
+/**
+ * Interface da classe Table_Cliente
+ */
 interface iTable_Cliente
 {
     public function insertCliente(Cliente $Cliente);
@@ -24,6 +26,8 @@ class Table_Cliente extends Banco implements iTable_Cliente
      * Cadastra um cliente no banco.
      * 
      * @param Cliente $Cliente recebe um objeto do tipo cliente.
+     * 
+     * @return void
      */
     final function insertCliente(Cliente $Cliente)
     {
@@ -31,15 +35,20 @@ class Table_Cliente extends Banco implements iTable_Cliente
         $bd = new Table_Cliente();
         $bd->conectar();
         // verifica se os dados do cliente estão corretos e de acordo com o banco
-        if ($this->verificarCliente($Cliente->getNome())) {
-            print_r($Cliente);
-            $sql = $pdo->prepare("INSERT INTO `cliente`(`nome_cliente`, `situacao`, `descricao`, `tipo_cliente`, `status_cliente`) VALUES(?, ?, ?, ?, ?)");
-            $sql->execute(array($Cliente->getNome(), $Cliente->getSituacao(), $Cliente->getDescricao(), $Cliente->getTipo(), $Cliente->getStatus()));
-            echo 'Cliente Salvo';
-        } else {
-            echo 'Cliente Falhou';
-            return 050;
+        try {
+            if ($this->verificarCliente($Cliente->getNome())) {
+                print_r($Cliente);
+                $sql = $pdo->prepare("INSERT INTO `cliente`(`nome_cliente`, `situacao`, `descricao`, `tipo_cliente`, `status_cliente`) VALUES(?, ?, ?, ?, ?)");
+                $sql->execute(array($Cliente->getNome(), $Cliente->getSituacao(), $Cliente->getDescricao(), $Cliente->getTipo(), $Cliente->getStatus()));
+                echo 'Cliente Salvo';
+            } else {
+                echo 'Cliente Falhou';
+                return 050;
+            }
+        } catch (PDOException $th) {
+            echo '#Erro ao salvar o Cliente#';
         }
+
         $bd->desconectar();
     }
 
@@ -67,24 +76,29 @@ class Table_Cliente extends Banco implements iTable_Cliente
         $bd = new Table_Cliente();
         $bd->conectar();
         $sql = $pdo->prepare("SELECT `nome_cliente`, `situacao`, `descricao`, `tipo_cliente`, `status_cliente` FROM `cliente` WHERE id_cliente = ?");
-        $sql->execute(array($id));
-        while ($col = $sql->fetch(PDO::FETCH_ASSOC)) {
-            $dados[] = $col['nome_cliente'];
-            $dados[] = $col['situacao'];
-            $dados[] = $col['descricao'];
-            $dados[] = $col['tipo_cliente'];
-            $dados[] = $col['status_cliente'];
+        try {
+            $sql->execute(array($id));
+            while ($col = $sql->fetch(PDO::FETCH_ASSOC)) {
+                $dados[] = $col['nome_cliente'];
+                $dados[] = $col['situacao'];
+                $dados[] = $col['descricao'];
+                $dados[] = $col['tipo_cliente'];
+                $dados[] = $col['status_cliente'];
+            }
+            return $dados;
+        } catch (\Throwable $th) {
+            echo '#Erro ao selecionar o cliente#';
         }
-        return $dados;
+
         $bd->desconectar();
     }
 
     /**
      * Atualiza os dados de um cliente pelo seu ID
      * 
-     * @param int $id ID co cliente respctivo no banco.
+     * @param int $id ID do cliente respectivo no banco.
      * 
-     * @param Cliente $Cliente Objeto do tipo cliente contendo as informações que serão * alteradas.
+     * @param Cliente $Cliente Objeto do tipo cliente contendo as informações que serão alteradas.
      * 
      * @return bool retorna 'true' se tudo ocorrer bem, caso não retorna o erro do  
      * MySQL 
@@ -96,7 +110,7 @@ class Table_Cliente extends Banco implements iTable_Cliente
         $bd->conectar();
         $sql = $pdo->prepare('UPDATE `cliente` SET `nome_cliente`=?,`situacao`=?,`descricao`=? , `tipo_cliente` = ?, `status_cliente` = ? WHERE `id_cliente` = ?');
         try {
-            $sql->execute(array($Cliente->getNome(), $Cliente->getSituacao(), $Cliente->getDescricao(), $Cliente->getTipo(), $Cliente->getStatus(),$id));
+            $sql->execute(array($Cliente->getNome(), $Cliente->getSituacao(), $Cliente->getDescricao(), $Cliente->getTipo(), $Cliente->getStatus(), $id));
             return true;
         } catch (PDOException $erro) {
             return $erro;
@@ -116,13 +130,19 @@ class Table_Cliente extends Banco implements iTable_Cliente
         $bd = new Table_Cliente();
         $bd->conectar();
         $sql = $pdo->prepare("UPDATE `cliente` SET `status_cliente` = 'Desativo' WHERE `id_cliente` = ?");
-        $sql->execute(array($id));
+        try {
+            $sql->execute(array($id));
+            echo "!Excluidos com sucesso!";
+        } catch (\Throwable $th) {
+            echo '#Erro ao deletar o cliente#';
+        }
         $bd->desconectar();
-        echo "Excluidos com sucesso";
     }
 
     /**
-     * Retorna um json listando todos os cliente para que se possa utiliza-lo no AJAX.  
+     * Retorna um json listando todos os cliente para que se possa utiliza-lo no AJAX.
+     * 
+     * @return array $dados Lista de todos os clientes
      */
     final public function listarClientesArray()
     {
@@ -190,33 +210,59 @@ class Table_Cliente extends Banco implements iTable_Cliente
         $bd = new Table_Cliente();
         $bd->conectar();
         $sql = $pdo->prepare("SELECT * FROM `cliente` WHERE nome_cliente = ?");
-        $sql->execute(array($nome));
-        $data = $sql->rowCount();
-        while($col = $pdo->fetchAll(PDO::FETCH_ASSOC)){
-            $id = $col['id_produto'];
-        }
-        if ($data == 0) {
-            return $id;
-        } else {
-            return false;
+        try {
+            $sql->execute(array($nome));
+            $data = $sql->rowCount();
+            while ($col = $pdo->fetchAll(PDO::FETCH_ASSOC)) {
+                $id = $col['id_produto'];
+            }
+            if ($data == 0) {
+                return $id;
+            } else {
+                return false;
+            }
+        } catch (PDOException $th) {
+            echo '#Erro ao verificar o cliente#';
         }
     }
 
+    /**
+     * Define um cliente para o status 'Ativo'
+     * 
+     * @param int $id ID so cliente a ser ativado
+     * 
+     * @return void
+     */
     function ativarCliente($id)
     {
         global $pdo;
         $bd = new Table_Cliente();
         $bd->conectar();
         $sql = $pdo->prepare("UPDATE cliente SET status_cliente = ? WHERE id_cliente = ?");
-        $sql->execute(array('Ativo', $id));
+        try {
+            $sql->execute(array('Ativo', $id));
+        } catch (\Throwable $th) {
+            echo '#Erro ao ativar o cliente#';
+        }
     }
 
+    /**
+     * Define um cliente para o status 'Desativo'
+     * 
+     * @param int $id ID so cliente a ser ativado
+     * 
+     * @return void
+     */
     function desativarCliente($id)
     {
         global $pdo;
         $bd = new Table_Cliente();
         $bd->conectar();
         $sql = $pdo->prepare("UPDATE cliente SET status_cliente = ? WHERE id_cliente = ?");
-        $sql->execute(array('Desativo', $id));
+        try {
+            $sql->execute(array('Desativo', $id));
+        } catch (\Throwable $th) {
+            echo '#Erro ao desativar o cliente#';
+        }
     }
 }

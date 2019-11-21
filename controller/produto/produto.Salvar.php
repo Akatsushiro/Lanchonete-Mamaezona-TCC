@@ -19,8 +19,7 @@ if(empty($_POST[1]) || !isset($_POST[1])){
 } else {
     $imagem = $imgDir . md5($_POST[0]['add-nome-produto']) . '.jpg';
 }
-
-
+// Descomente para pegar uma imagem e move-la para uma pasta
 /*
 $imagem = $_FILES["imagem"]["name"];
 $separa = explode(".", $imagem);

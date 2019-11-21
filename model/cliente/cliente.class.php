@@ -4,6 +4,10 @@ require_once "cliente.PDO.php";
 $teste_unitario = new Seguranca();
 $bd = new Table_Cliente();
 
+
+/**
+ * Interface para classe Cliente
+ */
 interface iCliente
 {
     public function getNome();
@@ -67,15 +71,31 @@ final class Cliente implements iCliente
         $this->nome = $n;
     }
 
-
+    /**
+     * Recebe um valor de 1 a 3 e dependendo do valor define a situação do cliente:
+     * 
+     * 1 - Em dia
+     * 
+     * 2 - Em Aberto
+     * 
+     * 3 - Em débito
+     * 
+     * @param int $s valor relativo a situação
+     * 
+     * @return void
+     */
     function setSituacao($s)
     {
-        if ($s == 1) {
-            $this->situacao = 'Em dia';
-        } else if ($s == 3) {
-            $this->situacao = 'Em débito';
-        } else if ($s == 2) {
-            $this->situacao = 'Em aberto';
+        switch ($s) {
+            case 1:
+                $this->situacao = 'Em dia';
+                break;
+            case 2:
+                $this->situacao = 'Em aberto';
+                break;
+            case 3:
+                $this->situacao = 'Em débito';
+                break;
         }
     }
 
@@ -85,21 +105,50 @@ final class Cliente implements iCliente
         $this->descricao = $d;
     }
 
+    /**
+     * Define o tipo do cliente de acordo com o valor a receber:
+     * 
+     * 1 - Comum
+     * 
+     * 2 - Mensal
+     * 
+     * @param int $t Valor referente ao tipo do cliente.
+     * 
+     * @return void
+     */
     function setTipo($t)
     {
-        if ($t == 1) {
-            $this->tipo = 'Comum';
-        } else if ($t == 2) {
-            $this->tipo = 'Mensal';
+        switch ($t) {
+            case 1:
+                $this->tipo = 'Comum';
+                break;
+
+            case 2:
+                $this->tipo = 'Mensal';
+                break;
         }
     }
 
+    /**
+     * Define se um cliente está ou não ativo no sistema:
+     * 
+     * 1 - Ativo
+     * 
+     * 2 - Desativo
+     * 
+     * @param int $s Número relativo ao status do cliente
+     * 
+     * @return void
+     */
     function setStatus($s)
     {
-        if ($s == 1) {
-            $this->status = 'Ativo';
-        } else if ($s = 2) {
-            $this->status = 'Desativo';
+        switch ($s) {
+            case 1:
+                $this->status = 'Ativo';
+                break;
+            case 2:
+                $this->status = 'Desativo';
+                break;
         }
     }
 
@@ -115,6 +164,10 @@ final class Cliente implements iCliente
      * @param string $descricao Breve descrição do cliente.
      * 
      * @param string $tipo Se o cliente é 'C' Comum ou 'M' Mensal.
+     * 
+     * @param string $status Se o cliente está ou não ativo no sistema, tem 'Ativo' como valor padrão
+     * 
+     * @return void
      */
     private function dadosCliente($nome, $situacao, $descricao, $tipo, $status = 1)
     {
@@ -145,12 +198,15 @@ final class Cliente implements iCliente
         if ($teste_unitario->clienteTestes($this)) {
             $bd->insertCliente($this);
         } else {
+            echo '#Os dados do cliente contém erros#';
             header("HTTP/1.0 400 Inválida");
         }
     }
 
     /**
      * Atualiza os dados do cliente.
+     * 
+     * @param int $id Codigo do cliente a ter suas informações alteradas.
      * 
      * @param string $nome Nome do Cliente.
      * 
@@ -165,16 +221,16 @@ final class Cliente implements iCliente
         global $bd;
         global $teste_unitario;
         $this->dadosCliente($nome, $situacao, $descricao, $tipo, $status);
-        if($teste_unitario->clienteTestes($this)){
+        if ($teste_unitario->clienteTestes($this)) {
             $bd->updateCliente($id, $this);
         } else {
             header("HTTP/1.0 400 Inválida");
         }
     }
     /**
-     * Desativa um cliente na base de dados.
+     * Desativa clientes na base de dados.
      * 
-     * @param int $id ID do cliente no banco.
+     * @param array $id ID dos clientes no banco.
      * 
      * @return void
      */
@@ -186,6 +242,12 @@ final class Cliente implements iCliente
         }
     }
 
+
+    /**
+     * Lista os clientes comum json
+     * 
+     * @return void
+     */
     function listarClienteJson()
     {
         global $bd;
@@ -193,6 +255,13 @@ final class Cliente implements iCliente
         return json_encode($data, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
     }
 
+    /**
+     * Ativa ou desativa um cliente.
+     * 
+     * @param int $op 1 - para ativar um cliente, 2 - para desativar um cliente
+     * 
+     * @param int $id Código do cliente a ser alterado
+     */
     function alterarStatus($op, $id)
     {
         global $bd;
