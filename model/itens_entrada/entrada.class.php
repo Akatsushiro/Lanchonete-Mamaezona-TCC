@@ -31,32 +31,30 @@ class Entrada{
 
 /**
  * Insere os dados de uma entrada.
- * 
+ *
  * @param int $id ID do produto a ter a quantia alterada.
- * 
- * @param int $quantia 
- * 
+ *
+ * @param int $quantia
+ *
  * @return void
  */
     private function dadosEntrada($id, $quantia){
         $this->setQuantia($quantia);
         $this->setId($id);
     }
-    
+
 /**
  * Salva a entrada no banco
- * 
+ *
  * @param int $id Id do produto que teve a quantia redefinida, tem como padrão -1.
- * 
+ *
  * @param int $quantia Quanto que foi aderido no produto.
- * 
+ *
  * @return void
  */
     function salvarEntrada($id = -1, $quantia){
         $bd = new Table_Entrada();
-        if ($id < 0){
-            echo '#Produto não existe#';
-        } else {
+        if ($id >= 0){
             $this->dadosEntrada($id, $quantia);
             $bd->insertEntrada($id, $quantia);
         }

@@ -7,9 +7,9 @@ class Table_Produto extends Banco
 {
     /**
      * Faz o Insert de um novo produto no banco.
-     * 
+     *
      * @param Produto $Produto Objeto do tipo produto.
-     * 
+     *
      * @return PDOException Só tem retorno em casos de erro.
      */
     function insertProduto(Produto $Produto)
@@ -29,11 +29,11 @@ class Table_Produto extends Banco
 
     /**
      * Atualiza um registro no banco.
-     * 
+     *
      * @param int $id Código do registro a ser alterado.
-     * 
+     *
      * @param object $Produto Objeto do tipo produto contendo os dados do produto.
-     * 
+     *
      * @return string Retorna somente em casos de erro.
      */
     function updateProduto($id, Produto $Produto)
@@ -53,10 +53,10 @@ class Table_Produto extends Banco
 
     /**
      * Seleciona um produto pelo seu ID.
-     * 
+     *
      * @param int $id ID relativo ao produto a ser selecionado.
-     * 
-     * @return string Retorna somente em casos de erro. 
+     *
+     * @return string Retorna somente em casos de erro.
      */
     function selectProduto($id)
     {
@@ -88,10 +88,10 @@ class Table_Produto extends Banco
 
     /**
      * Seleciona um produto pelo seu ID e retorna um json compatível com o datatables.
-     * 
+     *
      * @param int $id ID relativo ao produto a ser selecionado.
-     * 
-     * @return string Retorna json ou um caso de erro. 
+     *
+     * @return string Retorna json ou um caso de erro.
      */
     function selectProdutoJson($id)
     {
@@ -121,9 +121,9 @@ class Table_Produto extends Banco
 
     /**
      * Desativa um produto no sistema pelo seu ID.
-     * 
+     *
      * @param int $id ID do produto a ser desativado.
-     * 
+     *
      * @return string Somente retorna em casos de erro.
      */
     function deleteProduto($id)
@@ -144,7 +144,7 @@ class Table_Produto extends Banco
 
     /**
      * Retorna um array com todos os produtos ativos no sistema.
-     * 
+     *
      * @return array Lista dos produtos e seus relativos dados.
      */
     function listarProdutosArray()
@@ -165,8 +165,30 @@ class Table_Produto extends Banco
     }
 
     /**
+     * Retorna um array com todos os produtos ativos no sistema.
+     *
+     * @return array Lista dos produtos e seus relativos dados.
+     */
+    function listarEstoqueArray()
+    {
+        global $pdo;
+        $bd = new Table_Produto();
+        $bd->conectar();
+        $sql = $pdo->prepare("SELECT id_produto, nome, marca, tipo, status, quantia, quantia_minima, custo, preco FROM `produto`");
+        try {
+            $sql->execute();
+            $dados = $sql->fetchAll();
+            return $dados;
+        } catch (\Throwable $th) {
+            echo '#Erro ao listar os produtos#';
+            return $th;
+        }
+        $bd->desconectar();
+    }
+
+    /**
      * Lista os produtos junto da função de excluir e alterar, SOMENTE PARA TESTES.
-     * 
+     *
      * @return void
      */
     function listarProduto()
@@ -223,11 +245,11 @@ class Table_Produto extends Banco
 
     /**
      * Aumenta a quantidade de um produto pelo seu ID.
-     * 
+     *
      * @param int $quantia Quantidade a ser somada ao produto.
-     * 
+     *
      * @param int $id Id do produto a ter sua quantidade alterada.
-     * 
+     *
      * @return string Retorna somente em casos de erro.
      */
     function updateEstoque($quantia, $id)
@@ -248,9 +270,9 @@ class Table_Produto extends Banco
 
     /**
      * Verifica o tipo do produto,se for do tipo Preparo, ele deve bloquear a adição de quantidade
-     * 
+     *
      * @param string $nome Nome do produto
-     * 
+     *
      * @return bool
      */
     function produtoNome($nome)

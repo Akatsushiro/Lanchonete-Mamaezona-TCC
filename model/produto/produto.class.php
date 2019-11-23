@@ -99,15 +99,15 @@ class Produto
     }
     /**
      * Define o tipo do produto de acordo com o valor recebido
-     * 
+     *
      * 1 - 'Comum'
-     * 
+     *
      * 2 - 'Preparo'
-     * 
+     *
      * 3 - 'Interno'
-     * 
+     *
      * @param int $tipo Valor relativo ao tipo
-     * 
+     *
      * @return void
      */
     function setTipo($tipo)
@@ -116,7 +116,6 @@ class Produto
             case 1:
                 $this->tipo = 'Comum';
                 break;
-
             case 2:
                 $this->tipo = 'Preparo';
                 break;
@@ -128,33 +127,40 @@ class Produto
 
     function setStatus($status)
     {
-        $this->status = stripslashes($status);
+      switch ($status) {
+          case 1:
+              $this->status = 'Ativo';
+              break;
+          case 2:
+              $this->status = 'Desativo';
+              break;
+      }
     }
-    // -------------- Métodos ---------------- 
+    // -------------- Métodos ----------------
     /**
      * Define os dados de um objeto produto
-     * 
+     *
      * @param string $nome Nome do Produto
-     * 
+     *
      * @param string $marca Marca do Produto
-     * 
+     *
      * @param string $imagem Caminho da imagem do produto
-     * 
+     *
      * @param double $preco Preço do produto
-     * 
+     *
      * @param double $custo Custo ao dono do produto
-     * 
+     *
      * @param int $quantia Quantidade do produto
-     * 
+     *
      * @param int $quantia_minima Quantidade minima que este produto deve ter no estoque
-     *  
+     *
      * @param string $tipo Se este produto precisa ser preparado, ou se é comum, ou se é interno
-     * 
-     * @param string $status Seo produto esta ativo ou Desativo
-     * 
+     *
+     * @param string $status Se o produto esta ativo ou Desativo
+     *
      * @return void
      */
-    private function dadosProduto($nome, $marca, $imagem, $preco, $custo, $quantia, $quantia_minima, $tipo, $status = 'Ativo')
+    private function dadosProduto($nome, $marca, $imagem, $preco, $custo, $quantia, $quantia_minima, $tipo, $status = 1)
     {
         $this->setNome($nome);
         $this->setMarca($marca);
@@ -169,23 +175,23 @@ class Produto
 
     /**
      * Cadastra um produto no sistema
-     * 
+     *
      * @param string $nome Nome do Produto
-     * 
+     *
      * @param string $marca Marca do Produto
-     * 
+     *
      * @param string $imagem Caminho da imagem do produto
-     * 
+     *
      * @param double $preco Preço do produto
-     * 
+     *
      * @param double $custo Custo ao dono do produto
-     * 
+     *
      * @param int $quantia Quantidade do produto
-     * 
+     *
      * @param int $quantia_minima Quantidade minima que este produto deve ter no estoque
-     *  
+     *
      * @param string $tipo Se este produto precisa ser preparado, ou se é comum, ou se é interno
-     * 
+     *
      * @return void
      */
     function cadastroProduto($nome, $marca, $imagem, $preco, $custo, $quantia, $quantia_minima, $tipo)
@@ -197,25 +203,25 @@ class Produto
 
     /**
      * Atualiza um produto no sistema
-     * 
+     *
      * @param int $id Código do produto no sistema
-     * 
+     *
      * @param string $nome Nome do Produto
-     * 
+     *
      * @param string $marca Marca do Produto
-     * 
+     *
      * @param string $imagem Caminho da imagem do produto
-     * 
+     *
      * @param double $preco Preço do produto
-     * 
+     *
      * @param double $custo Custo ao dono do produto
-     * 
+     *
      * @param int $quantia Quantidade do produto
-     * 
+     *
      * @param int $quantia_minima Quantidade minima que este produto deve ter no estoque
-     *  
+     *
      * @param string $tipo Se este produto precisa ser preparado, ou se é comum, ou se é interno
-     * 
+     *
      * @return void
      */
     function alterarProduto($id, $nome, $marca, $imagem, $preco, $custo, $quantia, $quantia_minima, $tipo)
@@ -227,9 +233,9 @@ class Produto
 
     /**
      * Desativa produtos no sistema
-     * 
+     *
      * @param array $id Lista dos IDs a serem desativados
-     * 
+     *
      * @return void
      */
     function excluirProduto($id)
@@ -242,11 +248,11 @@ class Produto
 
     /**
      * Adiciona quantidade a um produto
-     * 
+     *
      * @param int $quantia Quantidade a ser somada ao produto
-     * 
+     *
      * @param int $id Id do produto a ter a quantidade redefinida
-     * 
+     *
      * @return void
      */
     function adicionarEstoque($quantia, $id = -1)
@@ -259,11 +265,11 @@ class Produto
 
     /**
      * Retira quantidade a um produto
-     * 
+     *
      * @param int $quantia Quantidade a ser retirada ao produto
-     * 
+     *
      * @param int $id Id do produto a ter a quantidade redefinida
-     * 
+     *
      * @return void
      */
     function retirarEstoque($quantia, $id)
@@ -276,7 +282,7 @@ class Produto
 
     /**
      * Lista os produtos de forma compativel com o datatables no Front
-     * 
+     *
      * @return void
      */
     function listarProdutos()
@@ -289,9 +295,9 @@ class Produto
     /**
      * Verifica se um produto é do tipo 'Preparo', caso seja retorna false
      * se não for ele retorna o ID do produto
-     * 
+     *
      * @param string $nome Nome do produto
-     * 
+     *
      * @return bool Retorna falso se o produto for do tipo preparo, caso não retorna o ID do produto
      */
     function verificarProduto($nome)

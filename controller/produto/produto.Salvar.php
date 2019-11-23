@@ -14,7 +14,7 @@ $tipo            = addslashes(trim($_POST[0]['add-tipo-produto']));
 
 $imgDir = '../../img/produto/';
 
-if(empty($_POST[1]) || !isset($_POST[1])){
+if(empty($_POST[1])){
     $imagem = '../../img/produto/default.png';
 } else {
     $imagem = $imgDir . md5($_POST[0]['add-nome-produto']) . '.jpg';
@@ -34,7 +34,7 @@ $imagemF = strtolower(str_replace(' ', '', $nome)) . "." . $extensao;
         $unidades = addslashes(trim($_POST[0]['add-mais-unid-produto']));
         $entrada->salvarEntrada($id, $unidades);
         $produto->adicionarEstoque($unidades, $id);
-    } else if($id == false){
+    } else if($id == false || $id == -1){
         $produto->cadastroProduto($nome, $marca, $imagem, $preco, $custo, $quantia, $quantia_minima, $tipo);
     }
 //}
