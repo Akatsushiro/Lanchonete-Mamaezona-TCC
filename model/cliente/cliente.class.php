@@ -195,12 +195,12 @@ final class Cliente implements iCliente
         global $bd;
         global $teste_unitario;
         $this->dadosCliente($nome, $situacao, $descricao, $tipo);
-        if ($teste_unitario->clienteTestes($this)) {
+        //if ($teste_unitario->clienteTestes($this)) {
             $bd->insertCliente($this);
-        } else {
+        /*} else {
             echo '#Os dados do cliente contém erros#';
             header("HTTP/1.0 400 Inválida");
-        }
+        }*/
     }
 
     /**

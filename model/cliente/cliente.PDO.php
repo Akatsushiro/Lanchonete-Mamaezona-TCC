@@ -1,6 +1,7 @@
 <?php
 require_once "../../model/security.class.php";
 require_once "../../model/pdo.Banco.class.php";
+require_once "../../model/cliente/cliente.class.php";
 
 // Classe de CRUD da tabela Cliente
 $verificar = new Seguranca();
@@ -37,7 +38,6 @@ class Table_Cliente extends Banco implements iTable_Cliente
         // verifica se os dados do cliente estão corretos e de acordo com o banco
         try {
             if ($this->verificarCliente($Cliente->getNome())) {
-                print_r($Cliente);
                 $sql = $pdo->prepare("INSERT INTO `cliente`(`nome_cliente`, `situacao`, `descricao`, `tipo_cliente`, `status_cliente`) VALUES(?, ?, ?, ?, ?)");
                 $sql->execute(array($Cliente->getNome(), $Cliente->getSituacao(), $Cliente->getDescricao(), $Cliente->getTipo(), $Cliente->getStatus()));
                 echo 'Cliente Salvo';
@@ -209,15 +209,15 @@ class Table_Cliente extends Banco implements iTable_Cliente
         global $pdo;
         $bd = new Table_Cliente();
         $bd->conectar();
-        $sql = $pdo->prepare("SELECT * FROM `cliente` WHERE nome_cliente = ?");
+        $sql = $pdo->prepare("SELECT COUNT(*) FROM `cliente` WHERE nome_cliente = ?");
         try {
             $sql->execute(array($nome));
-            $data = $sql->rowCount();
-            while ($col = $pdo->fetchAll(PDO::FETCH_ASSOC)) {
+            $data = $sql->fetchColumn();
+            while ($col = $sql->fetchAll(PDO::FETCH_ASSOC)) {
                 $id = $col['id_produto'];
             }
             if ($data == 0) {
-                return $id;
+                return true;
             } else {
                 return false;
             }

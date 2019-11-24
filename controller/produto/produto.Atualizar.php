@@ -20,6 +20,6 @@ if(empty($_POST[1])){
     $imagem = $imgDir . md5($_POST[0]['alt-nome-produto']) . '.jpg';
 }
 
-$produto->alterarProduto($id, $nome, $marca, $imagem, $preco, $custo, $quantia, $quantia_minima, $tipo);
+$produto->alterarProduto($id, $nome, $marca, $imagem, $preco, $custo, $quantia, $quantia_minima, $tipo, $status = 1);
 
 //header("Location: ../../view/produto/produtos.Main.php");

@@ -5,5 +5,3 @@ $estoque = new Estoque();
 
 $data = $estoque->listarProdutos();
 print_r($data);
-
-//header("Location: ../../view/produto/produtos.Main.php");

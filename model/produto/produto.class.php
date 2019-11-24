@@ -226,10 +226,10 @@ class Produto
      *
      * @return void
      */
-    function alterarProduto($id, $nome, $marca, $imagem, $preco, $custo, $quantia, $quantia_minima, $tipo)
+    function alterarProduto($id, $nome, $marca, $imagem, $preco, $custo, $quantia, $quantia_minima, $tipo, $status)
     {
         $bd = new Table_Produto();
-        $this->dadosProduto($nome, $marca, $imagem, $preco, $custo, $quantia, $quantia_minima, $tipo);
+        $this->dadosProduto($nome, $marca, $imagem, $preco, $custo, $quantia, $quantia_minima, $tipo, $status);
         $bd->updateProduto($id, $this);
     }
 

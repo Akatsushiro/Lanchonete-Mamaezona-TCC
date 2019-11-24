@@ -41,9 +41,9 @@ class Table_Produto extends Banco
         global $pdo;
         $bd = new Table_Produto();
         $bd->conectar();
-        $sql = $pdo->prepare("UPDATE produto SET nome = ?, marca = ?, imagem = ?, preco = ?, custo = ?, quantia = ?, quantia_minima = ?, tipo = ? WHERE id_produto = ?");
+        $sql = $pdo->prepare("UPDATE produto SET nome = ?, marca = ?, imagem = ?, preco = ?, custo = ?, quantia = ?, quantia_minima = ?, tipo = ?, `status` = ? WHERE id_produto = ?");
         try {
-            $sql->execute(array($Produto->getNome(), $Produto->getMarca(), $Produto->getimagem(), $Produto->getPreco(), $Produto->getCusto(), $Produto->getQuantia(), $Produto->getQuantiaMinima(), $Produto->getTipo(), $id));
+            $sql->execute(array($Produto->getNome(), $Produto->getMarca(), $Produto->getimagem(), $Produto->getPreco(), $Produto->getCusto(), $Produto->getQuantia(), $Produto->getQuantiaMinima(), $Produto->getTipo(), $Produto->getStatus(), $id));
         } catch (PDOException $th) {
             echo '#Impossivel alterar os dados, verifique e tente novamente#';
             return $th;
@@ -257,10 +257,15 @@ class Table_Produto extends Banco
         global $pdo;
         $bd = new Table_Produto();
         $bd->conectar();
-        $sql = $pdo->prepare("UPDATE `produto` SET `quantia` = `quantia` + ? WHERE `id_produto` = ?");
+        $sql = $pdo->prepare("UPDATE `produto` SET `quantia` = `quantia` + ? WHERE `id_produto` = ? AND `tipo` != 'Preparo'");
         try {
             $sql->execute(array($quantia, $id));
-            $sql = $pdo->prepare("INSERT INTO `itens_entrada` VALUES ($quantia, DEFAULT, $id)");
+            $sql = $pdo->prepare("SELECT COUNT(*) FROM produto WHERE id_produto = ? AND tipo = 'Preparo'");
+            $sql->execute(array($id));
+            $test = $sql->fetchColumn();
+            if($test > 0){
+                echo '#DeletarInvalidoPreparo#';
+            }
         } catch (PDOException $th) {
             echo '#Erro ao atualizar a quantidade#';
             return $th;
