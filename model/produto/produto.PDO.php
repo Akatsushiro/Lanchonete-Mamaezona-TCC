@@ -152,7 +152,7 @@ class Table_Produto extends Banco
         global $pdo;
         $bd = new Table_Produto();
         $bd->conectar();
-        $sql = $pdo->prepare("SELECT id_produto, nome, marca, tipo, quantia, quantia_minima, custo, preco FROM `produto` WHERE `status` = 'Ativo'");
+        $sql = $pdo->prepare("SELECT id_produto, nome, marca, tipo, quantia, quantia_minima, custo, preco FROM `produto` WHERE `status` = 'Ativo' AND `tipo` != 'Interno'");
         try {
             $sql->execute();
             $dados = $sql->fetchAll();
