@@ -118,6 +118,8 @@ class Produto
                 break;
             case 2:
                 $this->tipo = 'Preparo';
+                $this->quantia = 1;
+                $this->quantia_minima = 0;
                 break;
             case 3:
                 $this->tipo = 'Interno';
