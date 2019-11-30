@@ -255,6 +255,12 @@ final class Cliente implements iCliente
         return json_encode($data, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
     }
 
+    function listarClienteVenda()
+    {
+        global $bd;
+        $data['data'] = $bd->listarClientesVendas();
+        return json_encode($data, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
+    }
     /**
      * Ativa ou desativa um cliente.
      * 

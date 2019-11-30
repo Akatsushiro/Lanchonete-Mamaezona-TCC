@@ -9,24 +9,25 @@ class Table_Pedido extends Banco{
         $bd->conectar();
         $sql = $pdo->prepare("INSERT INTO pedido (valor, tipo, desconto, acrescimo) VALUES (?, ?, ?, ?)");
         try {
-            $dados = $sql->execute(array());
-            $dados = $dados->fetchAll(PDO::FETCH_ASSOC);
-            return $dados;
+            $sql->execute(array($valor, $tipo, $desconto, $acrescimo));
+            $sql = $pdo->prepare("SELECT MAX(id_pedido) FROM pedido");
+            $sql->execute();
+            return $sql->fetchColumn();
         } catch (PDOException $th) {
             echo '#Erro ao listar os produtos#';
             return $th;
         }
+        $this->desconectar();
     }
 
     function selectProdutos($pesquisa){
         global $pdo;
         $bd = new Table_Pedido();
         $bd->conectar();
-        $sql = $pdo->prepare("SELECT id_produto, nome, imagem, preco FROM produto WHERE nome LIKE ?");
+        $sql = $pdo->prepare("SELECT id_produto, nome, quantia, preco, quantia, tipo FROM produto WHERE LOWER(nome) LIKE LOWER(?) AND quantia > 0 AND tipo != 'Interno' LIMIT 5");
         try {
-            $dados = $sql->execute(array('%' . $pesquisa . '%'));
-            $dados = $dados->fetchAll(PDO::FETCH_ASSOC);
-            return $dados;
+            $sql->execute(array($pesquisa . '%'));
+            return $sql->fetchAll(PDO::FETCH_ASSOC);
         } catch (PDOException $th) {
             echo '#Erro ao listar os produtos#';
             return $th;

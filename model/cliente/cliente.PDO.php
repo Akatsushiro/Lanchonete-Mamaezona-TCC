@@ -155,6 +155,16 @@ class Table_Cliente extends Banco implements iTable_Cliente
         return $dados;
     }
 
+    final public function listarClientesVendas()
+    {
+        global $pdo;
+        $bd = new Table_Cliente();
+        $bd->conectar();
+        $sql = $pdo->prepare("SELECT id_cliente, nome_cliente FROM cliente WHERE `status_cliente` = 'Ativo'");
+        $sql->execute();
+        $dados = $sql->fetchAll();
+        return $dados;
+    }
     /**
      * Listar clientes com opções de exclusão e alterar, SOMENTE PARA TESTES
      */

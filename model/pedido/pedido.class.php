@@ -1,8 +1,6 @@
 <?php 
 require_once '../../model/pedido/pedido.PDO.php';
 
-$bd = new Table_Pedido();
-
 class Pedido{
 
     private $valor;
@@ -58,9 +56,14 @@ class Pedido{
     }
 
     function pesquisarProdutos($texto){
-        global $bd;
-        $dados['data'] = $bd->selectProduto($texto);
+        $bd = new Table_Pedido();
+        $dados['response'] = $bd->selectProdutos($texto);
         return json_encode($dados, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
+    }
+
+    function novaVenda($valor, $forma_de_pagamento){
+        $bd = new Table_Pedido();
+        return $bd->insertPedido($valor, $forma_de_pagamento);
     }
     
 }
