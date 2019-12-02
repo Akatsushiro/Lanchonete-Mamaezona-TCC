@@ -189,4 +189,14 @@ class Table_Funcionario extends Banco
         }
         return "{\"data\":" . json_encode($dados) . '}';
     }
+
+    final public function listarFuncionarioVendas($id)
+    {
+        global $pdo;
+        $bd = new Table_Cliente();
+        $bd->conectar();
+        $sql = $pdo->prepare("SELECT id_funcionarios AS id_cliente, nome AS nome_cliente FROM funcionarios WHERE id_funcionarios = ? AND `status` = 1");
+        $sql->execute(array($id));
+        return $sql->fetchAll();
+    }
 }

@@ -255,12 +255,19 @@ final class Cliente implements iCliente
         return json_encode($data, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
     }
 
-    function listarClienteVenda()
+
+
+
+
+    function listarClienteVendas($id)
     {
-        global $bd;
-        $data['data'] = $bd->listarClientesVendas();
+        $bd = new Table_Cliente();
+        $data['cliente'] = $bd->listarClientesVendas($id);
         return json_encode($data, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
     }
+
+
+
     /**
      * Ativa ou desativa um cliente.
      * 
@@ -279,5 +286,9 @@ final class Cliente implements iCliente
                 $bd->desativarCliente($id);
                 break;
         }
+    }
+
+    function novoDevedor($id_cliente, $id_pedido){
+
     }
 }

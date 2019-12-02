@@ -55,7 +55,7 @@ class Venda{
     }
 
 //---------------------------------------------------------------
-    function salvarSaida($id_pedido, $produtosLista){
+    function salvarItensVendidos($id_pedido, $produtosLista){
         foreach ($produtosLista as $prod){
             $bd = new Table_Vendidos();
             $bd->insertItem($prod[2], $id_pedido, $prod[0]);

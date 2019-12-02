@@ -1,5 +1,7 @@
 <?php 
 require_once '../../model/pedido/pedido.PDO.php';
+require_once '../../model/contas/contas.PDO.php';
+require_once '../../model/consumo_interno/consumo_interno.PDO.php';
 
 class Pedido{
 
@@ -51,9 +53,6 @@ class Pedido{
         $this->acrescimo($acrescimo);
     }
 
-    function gerarVenda($valor, $tipo, $desconto = 0, $acrescimo = 0, $produtos){
-        
-    }
 
     function pesquisarProdutos($texto){
         $bd = new Table_Pedido();
@@ -65,5 +64,14 @@ class Pedido{
         $bd = new Table_Pedido();
         return $bd->insertPedido($valor, $forma_de_pagamento);
     }
-    
+
+    function anexarCliente($id_cliente, $id_pedido){
+        $bd = new Table_Contas();
+        $bd->insertContas($id_cliente, $id_pedido);
+    }
+
+    function anexarFuncionario($id_funcionario, $id_pedido){
+        $bd = new Table_Consumo();
+        $bd->insertConsumo($id_funcionario, $id_pedido);
+    }
 }

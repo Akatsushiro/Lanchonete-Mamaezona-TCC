@@ -210,6 +210,14 @@ class Funcionario
         $bd->updateFuncionario($id, $this);
     }
 
+
+    function listarFuncionarioConsumo($id)
+    {
+        global $bd;
+        $data['cliente'] = $bd->listarFuncionarioVendas($id);
+        return json_encode($data, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
+    }
+
     /**
      * Desativa um funcionario no sistema.
      * 

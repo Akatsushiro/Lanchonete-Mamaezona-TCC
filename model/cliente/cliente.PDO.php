@@ -16,6 +16,7 @@ interface iTable_Cliente
     public function deleteCliente($id);
     public function listarClientesArray();
     public function listarClientes();
+    public function listarClientesVendas($id);
 }
 /**
  * Classe responsável pelas alterações de cliente no banco. Aqui contém somente as 
@@ -155,15 +156,14 @@ class Table_Cliente extends Banco implements iTable_Cliente
         return $dados;
     }
 
-    final public function listarClientesVendas()
+    final public function listarClientesVendas($id)
     {
         global $pdo;
         $bd = new Table_Cliente();
         $bd->conectar();
-        $sql = $pdo->prepare("SELECT id_cliente, nome_cliente FROM cliente WHERE `status_cliente` = 'Ativo'");
-        $sql->execute();
-        $dados = $sql->fetchAll();
-        return $dados;
+        $sql = $pdo->prepare("SELECT id_cliente, nome_cliente FROM cliente WHERE id_cliente = ? AND `status_cliente` = 'Ativo'");
+        $sql->execute(array($id));
+        return $sql->fetchAll();
     }
     /**
      * Listar clientes com opções de exclusão e alterar, SOMENTE PARA TESTES
