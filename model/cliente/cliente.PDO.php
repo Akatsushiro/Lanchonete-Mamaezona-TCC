@@ -150,7 +150,7 @@ class Table_Cliente extends Banco implements iTable_Cliente
         global $pdo;
         $bd = new Table_Cliente();
         $bd->conectar();
-        $sql = $pdo->prepare("SELECT id_cliente, nome_cliente, situacao, tipo_cliente, `status_cliente`, DATE_FORMAT(data_cliente, '%d/%m/%Y') as data_cliente, descricao FROM cliente");
+        $sql = $pdo->prepare("SELECT id_cliente, nome_cliente, situacao, divida, tipo_cliente, `status_cliente`, DATE_FORMAT(data_cliente, '%d/%m/%Y') as data_cliente, descricao FROM devedores");
         $sql->execute();
         $dados = $sql->fetchAll();
         return $dados;
