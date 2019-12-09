@@ -307,4 +307,11 @@ class Produto
         $bd = new Table_Produto();
         return $bd->produtoNome($nome);
     }
+
+    function notificacoes(){
+        $bd = new Table_Produto();
+        $data['lista_de_notificacao'] = $bd->selectNotificacoes();
+        return json_encode($data, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
+    }
+
 }

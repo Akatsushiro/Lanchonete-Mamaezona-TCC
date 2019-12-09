@@ -152,8 +152,7 @@ class Table_Cliente extends Banco implements iTable_Cliente
         $bd->conectar();
         $sql = $pdo->prepare("SELECT id_cliente, nome_cliente, situacao, divida, tipo_cliente, `status_cliente`, DATE_FORMAT(data_cliente, '%d/%m/%Y') as data_cliente, descricao FROM devedores");
         $sql->execute();
-        $dados = $sql->fetchAll();
-        return $dados;
+        return $sql->fetchAll();
     }
 
     final public function listarClientesVendas($id)
@@ -274,5 +273,13 @@ class Table_Cliente extends Banco implements iTable_Cliente
         } catch (\Throwable $th) {
             echo '#Erro ao desativar o cliente#';
         }
+    }
+
+    function addCredito($credito, $id_cliente){
+        global $pdo;
+        $bd = new Table_Cliente();
+        $bd->conectar();
+        $sql = $pdo->prepare("UPDATE cliente SET credito = credito + ? WHERE id_cliente = ?");
+        $sql->execute(array($credito, $id_cliente));
     }
 }

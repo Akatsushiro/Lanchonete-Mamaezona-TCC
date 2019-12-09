@@ -304,4 +304,13 @@ class Table_Produto extends Banco
         }
         $bd->desconectar();
     }
+
+    function selectNotificacoes(){
+        global $pdo;
+        $bd = new Table_Produto();
+        $bd->conectar();
+        $sql = $pdo->prepare("SELECT produto.id_produto AS id, produto.nome, produto.quantia AS quantidade, produto.quantia_minima AS quantidade_minima FROM produto WHERE produto.quantia <= produto.quantia_minima AND produto.tipo != 'Preparo' AND `status` = 'Ativo'");
+        $sql->execute();
+        return $sql->fetchAll();
+    }
 }

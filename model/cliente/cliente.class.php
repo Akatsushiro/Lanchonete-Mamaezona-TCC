@@ -288,7 +288,8 @@ final class Cliente implements iCliente
         }
     }
 
-    function novoDevedor($id_cliente, $id_pedido){
-
+    function clienteCredito($credito, $id_cliente){
+        $bd = new Table_Cliente();
+        $bd->addCredito($credito, $id_cliente);
     }
 }
